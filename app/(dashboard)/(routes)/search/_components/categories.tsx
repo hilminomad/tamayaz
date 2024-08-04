@@ -4,6 +4,8 @@ import { Category } from '@prisma/client';
 
 import {
   FcEngineering,
+  FcInspection,
+  FcGraduationCap,
   FcFilmReel,
   FcMultipleDevices,
   FcMusic,
@@ -20,13 +22,8 @@ interface CategoriesProps {
 }
 
 const iconMap: Record<Category['name'], IconType> = {
-  Music: FcMusic,
-  Photography: FcOldTimeCamera,
-  Fitness: FcSportsMode,
-  Accounting: FcSalesPerformance,
-  'Computer Science': FcMultipleDevices,
-  Filming: FcFilmReel,
-  Engineering: FcEngineering,
+  Formation: FcInspection,
+  Cours: FcGraduationCap,
 };
 
 export const Categories = ({ items }: CategoriesProps) => {

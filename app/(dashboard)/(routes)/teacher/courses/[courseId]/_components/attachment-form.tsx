@@ -31,24 +31,25 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    try {
-      await axios.post(`/api/courses/${courseId}/attachments`, values);
-      toast.success('Course updated');
-      toggleEdit();
-      router.refresh();
-    } catch (error) {
-      toast.error('Something went wrong');
-    }
+   try 
+   {
+        await axios.post(`/api/courses/${courseId}/attachments`, values);
+        toast.success('Cours mis à jour');
+        toggleEdit();
+        router.refresh();
+      } catch (error) {
+        toast.error("Une erreur s'est produite");
+      }
   };
 
   const onDelete = async (id: string) => {
     try {
       setDeletingId(id);
       await axios.delete(`/api/courses/${courseId}/attachments/${id}`);
-      toast.success('Attachment deleted');
+      toast.success('Pièce jointe supprimée');
       router.refresh();
     } catch (error) {
-      toast.error('Something went wrong');
+      toast.error("Une erreur s'est produite");
     } finally {
       setDeletingId(null);
     }
@@ -63,7 +64,7 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
           {!isEditing && (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
-              Add a file
+              Ajoutez un fichier
             </>
           )}
         </Button>
@@ -72,7 +73,7 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
         <>
           {initialData.attachments.length === 0 && (
             <p className="text-sm mt-2 text-slate-500 italic">
-              No attachments yet
+              Aucun fichier joint pour le moment.
             </p>
           )}
           {initialData.attachments.length > 0 && (
@@ -114,7 +115,7 @@ const AttachmentForm = ({ initialData, courseId }: AttachmentFormProps) => {
             }}
           />
           <div className="text-xs text-muted-foreground mt-4">
-            Add anything your students might need to complete the course
+          Ajoutez des ressources utiles pour vos étudiants
           </div>
         </div>
       )}

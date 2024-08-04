@@ -34,17 +34,17 @@ const ChapterActions = ({
         await axios.patch(
           `/api/courses/${courseId}/chapters/${chapterId}/unpublish`
         );
-        toast.success('Chapter unpublished');
+        toast.success('Chapitre non publié');
       } else {
         await axios.patch(
           `/api/courses/${courseId}/chapters/${chapterId}/publish`
         );
-        toast.success('Chapter published');
+        toast.success('Chapitre publié');
       }
 
       router.refresh();
     } catch (error) {
-      toast.error('Something went wrong');
+      toast.error("Une erreur s'est produite");
     } finally {
       setIsLoading(false);
     }
@@ -56,11 +56,11 @@ const ChapterActions = ({
 
       await axios.delete(`/api/courses/${courseId}/chapters/${chapterId}`);
 
-      toast.success('Chapter deleted');
+      toast.success('Chapitre supprimé');
       router.refresh();
       router.push(`/teacher/courses/${courseId}`);
     } catch (error) {
-      toast.error('Something went wrong');
+      toast.error("Une erreur s'est produite");
     } finally {
       setIsLoading(false);
     }
@@ -74,7 +74,7 @@ const ChapterActions = ({
         variant="outline"
         size="sm"
       >
-        {isPublished ? 'Unpublish' : 'Publish'}
+        {isPublished ? 'Retirer' : 'Publier'}
       </Button>
       <ConfirmModal onConfirm={onDelete}>
         <Button size="sm" disabled={isLoading}>

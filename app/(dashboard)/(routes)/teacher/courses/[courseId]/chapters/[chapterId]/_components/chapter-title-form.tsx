@@ -56,25 +56,25 @@ const ChapterTitleForm = ({
         `/api/courses/${courseId}/chapters/${chapterId}`,
         values
       );
-      toast.success('Chapter updated');
+      toast.success('Chapitre modifié');
       toggleEdit();
       router.refresh();
     } catch (error) {
-      toast.error('Something went wrong');
+      toast.error("Une erreur s'est produite");
     }
   };
 
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Chapter title
+        Titre du chapitre
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
-            <>Cancel</>
+            <>Annuler</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Edit title
+              Modifier le titre
             </>
           )}
         </Button>
@@ -94,7 +94,7 @@ const ChapterTitleForm = ({
                   <FormControl>
                     <Input
                       disabled={isSubmitting}
-                      placeholder="ex. 'Introduction to the course'"
+                      placeholder="ex. 'Introduction à cours'"
                       {...field}
                     />
                   </FormControl>
@@ -104,7 +104,7 @@ const ChapterTitleForm = ({
             />
             <div className="flex items-center gap-x-2">
               <Button disabled={!isValid || isSubmitting} type="submit">
-                Save
+                Enregister
               </Button>
             </div>
           </form>

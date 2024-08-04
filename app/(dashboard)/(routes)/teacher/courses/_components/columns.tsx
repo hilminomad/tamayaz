@@ -29,7 +29,7 @@ export const columns: ColumnDef<Course>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Title
+          Titre
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -43,16 +43,16 @@ export const columns: ColumnDef<Course>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Price
+          Prix
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
     cell: ({ row }) => {
       const price = parseFloat(row.getValue('price') || '0');
-      const formatted = new Intl.NumberFormat('en-US', {
+      const formatted = new Intl.NumberFormat('fr-MA', {
         style: 'currency',
-        currency: 'USD',
+        currency: 'MAD',
       }).format(price);
 
       return <div>{formatted}</div>;
@@ -66,7 +66,7 @@ export const columns: ColumnDef<Course>[] = [
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === 'asc')}
         >
-          Published
+          Publié ?
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
@@ -76,7 +76,7 @@ export const columns: ColumnDef<Course>[] = [
 
       return (
         <Badge className={cn('bg-slate-500', isPublished && 'bg-sky-700')}>
-          {isPublished ? 'Published' : 'Draft'}
+          {isPublished ? 'Publié' : 'Brouillon'}
         </Badge>
       );
     },
@@ -90,7 +90,7 @@ export const columns: ColumnDef<Course>[] = [
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-4 w-8 p-0">
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">Ouvrir menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
@@ -98,7 +98,7 @@ export const columns: ColumnDef<Course>[] = [
             <Link href={`/teacher/courses/${id}`}>
               <DropdownMenuItem>
                 <Pencil className="h-4 w-4 mr-2" />
-                Edit
+                Modifier
               </DropdownMenuItem>
             </Link>
           </DropdownMenuContent>

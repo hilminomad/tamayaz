@@ -1,3 +1,5 @@
+// This script is for pushing categories to db
+
 const { PrismaClient } = require('@prisma/client');
 
 const database = new PrismaClient();
@@ -6,13 +8,8 @@ async function main() {
   try {
     await database.category.createMany({
       data: [
-        { name: 'Computer Science' },
-        { name: 'Music' },
-        { name: 'Fitness' },
-        { name: 'Accounting' },
-        { name: 'Photography' },
-        { name: 'Filming' },
-        { name: 'Engineering' },
+        { name: 'Formation' },
+        { name: 'Cours' },
       ],
     });
 
