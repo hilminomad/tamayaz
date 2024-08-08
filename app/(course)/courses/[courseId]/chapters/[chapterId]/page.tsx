@@ -48,11 +48,11 @@ const ChapterIdPage = async ({
   return (
     <div>
       {userProgress?.isCompleted && (
-        <Banner label="You already completed this chapter." variant="success" />
+        <Banner label="Vous avez déjà terminé ce chapitre." variant="success" />
       )}
       {isLocked && (
         <Banner
-          label="You need to purchase this course to watch this chapter."
+          label="Vous devez acheter ce cours pour regarder ce chapitre."
           variant="warning"
         />
       )}

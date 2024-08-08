@@ -2,10 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@import url('https://fonts.googleapis.com/css2?family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+
+
+
+
+
 html,
 body,
 :root {
   height: 100%;
+  
+  font-family: "Rubik", sans-serif;
 }
 
 @layer base {
@@ -86,3 +94,11 @@ body,
 }
 
 @import '~@uploadthing/react/styles.css';
+
+h1 {
+  font-weight: bold;
+}
+
+h2  {
+  font-weight: 600;
+}

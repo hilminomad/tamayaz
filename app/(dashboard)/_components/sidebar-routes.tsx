@@ -8,12 +8,12 @@ import SidebarItem from './sidebar-item';
 const guestRotues = [
   {
     icon: Layout,
-    label: 'Dashboard',
-    href: '/',
+    label: 'Tableau de bord',
+    href: '/dashboard',
   },
   {
     icon: Compass,
-    label: 'Browse',
+    label: 'Cours',
     href: '/search',
   },
 ];
@@ -21,12 +21,12 @@ const guestRotues = [
 const teacherRotues = [
   {
     icon: List,
-    label: 'Courses',
+    label: 'Cours',
     href: '/teacher/courses',
   },
   {
     icon: BarChart,
-    label: 'Analytics',
+    label: 'Analytique',
     href: '/teacher/analytics',
   },
 ];

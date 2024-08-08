@@ -32,7 +32,7 @@ export const CourseProgress = ({
           sizeByVariant[size || 'default']
         )}
       >
-        {Math.round(value)}% Complete
+        {Math.round(value)}% Complété
       </p>
     </div>
   );
