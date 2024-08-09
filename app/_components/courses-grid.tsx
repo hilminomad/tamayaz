@@ -5,7 +5,7 @@ export default async function CoursesGrid() {
   const courses = await getCourses(); // Assuming getCourses returns an array of courses
 
   return (
-    <div>
+    <div className='max-w-7xl w-full'>
       <CoursesList items={courses} />
     </div>
   );

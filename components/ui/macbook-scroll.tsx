@@ -77,12 +77,7 @@ export const MacbookScroll = ({
         }}
         className="dark:text-white text-neutral-800 text-3xl font-bold mb-20 text-center"
       >
-        {title || (
-            <h2>
-            Une plateforme qui l'éducation plus
-            <br/> Simple et Amusante
-          </h2>
-        )}
+        {title}
       </motion.h2>
       {/* Lid */}
       <Lid

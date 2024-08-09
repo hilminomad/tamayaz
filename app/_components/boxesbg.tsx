@@ -7,10 +7,11 @@ export function MacbookScrollDemo() {
     <div className="overflow-hidden dark:bg-[#0B0B0F] bg-white w-full">
       <MacbookScroll
         title={
-          <h2>
-            Une plateforme qui l'éducation plus
-            <br/> Simple et Amusante
-          </h2>
+          <span>
+            Une plateforme qui rend l'éducation plus
+            <br/> Simplifiée et Amusante
+          </span>            
+          
         }
         badge={
           <Link href="https://peerlist.io/manuarora">
