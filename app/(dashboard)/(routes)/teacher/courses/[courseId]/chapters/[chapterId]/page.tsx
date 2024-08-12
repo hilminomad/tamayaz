@@ -31,9 +31,7 @@ const ChapterIdPage = async ({
       id: params.chapterId,
       courseId: params.courseId,
     },
-    include: {
-      muxData: true,
-    },
+    
   });
 
   if (!chapter) {
