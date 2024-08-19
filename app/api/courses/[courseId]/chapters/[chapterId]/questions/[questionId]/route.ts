@@ -4,7 +4,7 @@ import { db } from '@/lib/db';
 
 export async function DELETE(
   req: Request,
-  { params }: { params: { courseId: string; chapterId: string } }
+  { params }: { params: { courseId: string; chapterId: string; questionId: string } }
 ) {
   try {
     const { userId } = auth();
@@ -24,55 +24,37 @@ export async function DELETE(
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
-    const chapter = await db.chapter.findUnique({
+    const question = await db.question.findUnique({
       where: {
-        id: params.chapterId,
-        courseId: params.courseId,
+        id: params.questionId,
+        chapterId: params.chapterId,
       },
     });
 
-    if (!chapter) {
+    if (!question) {
       return new NextResponse('Not found', { status: 404 });
     }
 
-    const deletedChapter = await db.chapter.delete({
+    const deletedQuestion = await db.question.delete({
       where: {
-        id: params.chapterId,
+        id: params.questionId,
       },
     });
 
-    const publishedChaptersInCouse = await db.chapter.findMany({
-      where: {
-        courseId: params.courseId,
-        isPublished: true,
-      },
-    });
-
-    if (!publishedChaptersInCouse.length) {
-      await db.course.update({
-        where: {
-          id: params.courseId,
-        },
-        data: {
-          isPublished: false,
-        },
-      });
-    }
-
-    return NextResponse.json(deletedChapter);
+    return NextResponse.json(deletedQuestion);
   } catch (error) {
-    console.log('[COURSES_COURSE-ID_CHAPTERS_CHPATER-ID]', error);
+    console.log('[COURSES_COURSE-ID_CHAPTERS_CHAPTER-ID_QUESTIONS_QUESTION-ID]', error);
     return new NextResponse('Internal Error', { status: 500 });
   }
 }
 
 export async function PATCH(
   req: Request,
-  { params }: { params: { courseId: string; chapterId: string } }
+  { params }: { params: { courseId: string; chapterId: string; questionId: string } }
 ) {
   try {
     const { userId } = auth();
-    const { isPublished, ...values } = await req.json();
+    const { ...values } = await req.json();
 
     if (!userId) {
       return new NextResponse('Unauthorized', { status: 401 });
@@ -89,19 +71,19 @@ export async function PATCH(
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
-    const chapter = await db.chapter.update({
+    const question = await db.question.update({
       where: {
-        id: params.chapterId,
-        courseId: params.courseId,
+        id: params.questionId,
+        chapterId: params.chapterId,
       },
       data: {
         ...values,
       },
     });
 
-    return NextResponse.json(chapter);
+    return NextResponse.json(question);
   } catch (error) {
-    console.log('[COURSES_COURSE-ID_CHAPTERS_CHPATER-ID]', error);
+    console.log('[COURSES_COURSE-ID_CHAPTERS_CHAPTER-ID_QUESTIONS_QUESTION-ID]', error);
     return new NextResponse('Internal Error', { status: 500 });
   }
 }

@@ -64,8 +64,9 @@ model Chapter {
 
   courseId String
   course Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
-
+  questions Question[]
   userProgress UserProgress[]
+  
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()
@@ -87,6 +88,35 @@ model UserProgress {
 
   @@index([chapterId])
   @@unique([userId, chapterId])
+}
+
+
+model Question {
+  id        String    @id @default(uuid())
+  title     String    @db.Text
+  position  Int
+  isPublished Boolean @default(false)
+  chapterId String
+  quiz      Chapter   @relation(fields: [chapterId], references: [id], onDelete: Cascade)
+  answers   Answer[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt()
+
+  @@index([chapterId])
+}
+
+model Answer {
+  id String @id @default(uuid())
+  title String @db.Text
+  isCorrect Boolean @default(false)
+
+  questionId String
+  question Question @relation(fields: [questionId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+
+  @@index([questionId])
 }
 
 model Purchase {

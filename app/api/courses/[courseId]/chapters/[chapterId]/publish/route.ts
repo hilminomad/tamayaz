@@ -30,12 +30,19 @@ export async function PATCH(
         id: params.chapterId,
         courseId: params.courseId,
       },
+      include: {
+        questions: {
+          where: {
+            isPublished: true,
+          },
+        },
+      },
     });
 
     // Remove the muxData query and related logic
     // ...
 
-    if (!chapter || !chapter.title || !chapter.description || !chapter.videoUrl) {
+    if (!chapter || !chapter.title || !chapter.description || !chapter.videoUrl || !chapter.questions.length) {
       return new NextResponse('Missing required fields', { status: 400 });
     }
 

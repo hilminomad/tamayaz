@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { auth } from '@clerk/nextjs';
-import { ArrowLeft, Eye, LayoutDashboard, Video } from 'lucide-react';
+import { ArrowLeft, CheckCheck, Eye, LayoutDashboard, Video } from 'lucide-react';
 
 import { db } from '@/lib/db';
 
@@ -14,6 +14,8 @@ import ChapterDescriptionForm from './_components/chapter-description-form';
 import ChapterAccessForm from './_components/chapter-access-form';
 import ChapterVideoForm from './_components/chapter-video-form';
 import ChapterActions from './_components/chapter-actions';
+import ChapterQuizForm from './_components/chapter-quiz-form';
+import { CourseCard } from '@/components/animated-course-card-guest';
 
 const ChapterIdPage = async ({
   params,
@@ -31,20 +33,28 @@ const ChapterIdPage = async ({
       id: params.chapterId,
       courseId: params.courseId,
     },
-    
+    include: {
+      questions: {
+        orderBy : {
+          position: 'asc',
+        },
+        include: {
+          answers: true, // Include answers here
+        },
+      }, // Make sure to include questions here
+    },
   });
+
+  //console.log(chapter)
 
   if (!chapter) {
     return redirect('/');
   }
 
   const requiredFields = [chapter.title, chapter.description, chapter.videoUrl];
-
   const totalFields = requiredFields.length;
   const completedFields = requiredFields.filter(Boolean).length;
-
   const completionText = `(${completedFields}/${totalFields})`;
-
   const isComplete = requiredFields.every(Boolean);
 
   return (
@@ -69,7 +79,7 @@ const ChapterIdPage = async ({
               <div className="flex flex-col gap-y-2">
                 <h1 className="text-2xl font-medium">Création de chapitre</h1>
                 <span className="text-sm text-slate-700">
-                Veuillez remplir tous les champs {completionText}
+                  Veuillez remplir tous les champs {completionText}
                 </span>
               </div>
               <ChapterActions
@@ -86,7 +96,7 @@ const ChapterIdPage = async ({
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={LayoutDashboard} />
-                <h2 className="text-xl">Personnalisez votre chapitre</h2>
+                <h2 className="text-xl">Personnaliser le chapitre</h2>
               </div>
               <ChapterTitleForm
                 initialData={chapter}
@@ -94,6 +104,17 @@ const ChapterIdPage = async ({
                 chapterId={params.chapterId}
               />
               <ChapterDescriptionForm
+                initialData={chapter}
+                courseId={params.courseId}
+                chapterId={params.chapterId}
+              />
+            </div>
+            <div>
+              <div className="flex items-center gap-x-2">
+                <IconBadge icon={Video} />
+                <h2 className="text-xl">Ajouter une vidéo</h2>
+              </div>
+              <ChapterVideoForm
                 initialData={chapter}
                 courseId={params.courseId}
                 chapterId={params.chapterId}
@@ -113,13 +134,14 @@ const ChapterIdPage = async ({
           </div>
           <div>
             <div className="flex items-center gap-x-2">
-              <IconBadge icon={Video} />
-              <h2 className="text-xl">Ajouter une vidéo</h2>
+              <IconBadge icon={CheckCheck} />
+              <h2 className="text-xl">Ajouter des questions</h2>
             </div>
-            <ChapterVideoForm
-              initialData={chapter}
+            <ChapterQuizForm 
+              initialData={chapter} // Pass the entire chapter, including questions
+              chapterId={params.chapterId} 
+
               courseId={params.courseId}
-              chapterId={params.chapterId}
             />
           </div>
         </div>

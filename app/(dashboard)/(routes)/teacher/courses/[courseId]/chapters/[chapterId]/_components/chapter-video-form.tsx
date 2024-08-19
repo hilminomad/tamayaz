@@ -15,7 +15,7 @@ import { FileUpload } from '@/components/file-upload';
 import ReactPlayer from 'react-player';
 
 interface ChapterVideoFormProps {
-  initialData: { videoUrl?: string };
+  initialData: { videoUrl?: string | null};
   courseId: string;
   chapterId: string;
 }
