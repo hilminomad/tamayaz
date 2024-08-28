@@ -56,14 +56,14 @@ const NavbarRoutes = () => {
       <div className="flex gap-x-2 ml-auto">
         {isTeacherPage || isCoursePage ? (
           <Link href="/dashboard">
-            <Button size="sm" variant="ghost">
+            <Button size="sm" variant="outline">
               <Book className="h-4 w-4 mr-2" />
               Mode étudiant
             </Button>
           </Link>
         ) : isTeacher(userId) ? (
           <Link href="/teacher/courses">
-            <Button size="sm" variant="ghost">
+            <Button size="sm" variant="outline">
               Mode admin
             </Button>
           </Link>

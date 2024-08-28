@@ -51,6 +51,7 @@ export const CourseProgressButton = ({
       toast.success("Progression mise à jour");
 
       router.refresh();
+      window.location.reload()
     } catch (error) {
       toast.error("Une erreur s'est produite");
     } finally {
@@ -61,15 +62,21 @@ export const CourseProgressButton = ({
   const Icon = isCompleted ? XCircle : CheckCircle;
 
   return (
-    <Button
-      disabled={isLoading}
-      onClick={onClick}
-      type="button"
-      variant={isCompleted ? 'outline' : 'success'}
-      className="w-full md:w-auto"
-    >
-      <Icon className="h-4 w-4 mr-2" />
-      {isCompleted ? 'Not as incomplete' : 'Mark as complete'}
-    </Button>
+    <>
+      {
+        isCompleted && 
+        <Button
+          disabled={isLoading}
+          onClick={onClick}
+          type="button"
+           variant={isCompleted ? 'outline' : 'success'}
+          className="w-full md:w-auto"
+        >
+          <Icon className="h-4 w-4 mr-2" />
+          {isCompleted ? 'Recommencer le chapitre':  'Marquer comme fini' }
+        </Button>
+      }
+    </>
+    
   );
 };

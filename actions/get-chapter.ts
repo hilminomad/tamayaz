@@ -1,4 +1,4 @@
-import { Attachment, Chapter } from '@prisma/client';
+import { Attachment, Chapter, Question } from '@prisma/client';
 
 import { db } from '@/lib/db';
 import { NextResponse } from 'next/server';
@@ -39,6 +39,16 @@ export const getChapter = async ({
         id: chapterId,
         isPublished: true,
       },
+      include:{
+        questions: {
+          where: {
+            isPublished: true, // Fetch only published questions
+          },
+          include: {
+            answers: true,  // Include answers for each question
+          },
+        },
+      }
     });
 
     if (!chapter || !course) {
@@ -46,6 +56,7 @@ export const getChapter = async ({
     }
 
     let attachments: Attachment[] = [];
+    let questions : Question[] = []
     let nextChapter: Chapter | null = null;
 
     if (purchase) {
@@ -54,6 +65,12 @@ export const getChapter = async ({
           courseId: courseId,
         },
       });
+      questions = await db.question.findMany({
+        where : {
+          chapterId : chapterId,
+          isPublished: true,
+        },
+      })
     }
 
     nextChapter = await db.chapter.findFirst({
@@ -82,6 +99,7 @@ export const getChapter = async ({
       chapter,
       course,
       attachments,
+      questions: chapter.questions,
       nextChapter,
       userProgress,
       purchase,
@@ -92,6 +110,7 @@ export const getChapter = async ({
       chapter: null,
       course: null,
       attachments: [],
+      questions: [],
       nextChapter: null,
       userProgress: null,
       purchase: null,

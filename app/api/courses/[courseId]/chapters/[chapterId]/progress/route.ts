@@ -1,7 +1,5 @@
 import { NextResponse } from 'next/server';
-
 import { auth } from '@clerk/nextjs';
-
 import { db } from '@/lib/db';
 
 export async function PUT(
@@ -10,7 +8,7 @@ export async function PUT(
 ) {
   try {
     const { userId } = auth();
-    const { isCompleted } = await req.json();
+    const { isCompleted, isFirstTime } = await req.json(); // Accept both isCompleted and isFirstTime
 
     if (!userId) {
       return new NextResponse('Unauthorized', { status: 401 });
@@ -25,11 +23,13 @@ export async function PUT(
       },
       update: {
         isCompleted: isCompleted,
+        isFirstTime: isFirstTime, // Update isFirstTime
       },
       create: {
         userId: userId,
         chapterId: params.chapterId,
         isCompleted: isCompleted,
+        isFirstTime: isFirstTime, // Create with isFirstTime
       },
     });
 

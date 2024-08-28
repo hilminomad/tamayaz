@@ -44,16 +44,16 @@ const CreatePage = () => {
     try {
       const response = await axios.post('/api/courses', values);
       router.push(`/teacher/courses/${response.data.id}`);
-      toast.success('Course created');
+      toast.success('Cours ajouté avec succès');
     } catch (error) {
-      toast.error('Something went wrong');
+      toast.error('Erreur');
     }
   };
 
   return (
     <div className="max-w-5xl mx-auto flex md:items-center md:justify-center h-full p-6">
       <div>
-        <h1 className="text-2xl">Donnez un TITRE à votre cours</h1>
+        <h1 className="text-2xl text-semibold">Donnez un <title></title> à votre cours</h1>
         <p className="text-sm text-slate-600">
           Quel titre souhaitez-vous donner à votre cours ? Ne vous inquiétez pas, vous pourrez le changer plus tard.
         </p>

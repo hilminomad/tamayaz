@@ -82,6 +82,7 @@ model UserProgress {
   chapter Chapter @relation(fields: [chapterId], references: [id], onDelete: Cascade)
 
   isCompleted Boolean @default(false)
+  isFirstTime Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt()

@@ -1,24 +1,14 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
-
-import axios from 'axios';
+import { useState, useRef } from 'react';
 import ReactPlayer from 'react-player';
-
-import { toast } from 'react-hot-toast';
-import { Loader2, Lock } from 'lucide-react';
-
-import { cn } from '@/lib/utils';
-import { useConfettiStore } from '@/hooks/use-confetti-store';
+import { Loader2, Lock, Play, Pause } from 'lucide-react';
 
 interface VideoPlayerProps {
-  
   courseId: string;
   chapterId: string;
   nextChapterId?: string;
   isLocked: boolean;
-  completeOnEnd: boolean;
   title: string;
   videoUrl?: string | null;
 }
@@ -28,43 +18,43 @@ export const VideoPlayer = ({
   chapterId,
   nextChapterId,
   isLocked,
-  completeOnEnd,
   title,
   videoUrl,
 }: VideoPlayerProps) => {
   const [isReady, setIsReady] = useState(false);
-  const router = useRouter();
-  const confetti = useConfettiStore();
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [playedSeconds, setPlayedSeconds] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const playerRef = useRef<ReactPlayer>(null);
 
-  const onEnd = async () => {
-    try {
-      if (completeOnEnd) {
-        await axios.put(
-          `/api/courses/${courseId}/chapters/${chapterId}/progress`,
-          {
-            isCompleted: true,
-          }
-        );
-
-        if (!nextChapterId) {
-          confetti.onOpen();
-        }
-
-        toast.success('Progress Updated');
-
-        router.refresh();
-
-        if (nextChapterId) {
-          router.push(`/courses/${courseId}/chapters/${nextChapterId}`);
-        }
+  const handlePlayPause = () => {
+    if (playerRef.current) {
+      const player = playerRef.current.getInternalPlayer();
+      if (isPlaying) {
+        player.pause();
+      } else {
+        player.play();
       }
-    } catch (error) {
-      toast.error('Something went wrong');
+      setIsPlaying(!isPlaying);
     }
   };
-  console.log('Video URL:', videoUrl);
+
+  const handleProgress = (state: { playedSeconds: number; loadedSeconds: number; played: number; loaded: number }) => {
+    setPlayedSeconds(state.playedSeconds);
+  };
+
+  const handleDuration = (duration: number) => {
+    setDuration(duration);
+  };
+
+  const progressPercentage = (playedSeconds / duration) * 100;
+
   return (
-    <div className="relative aspect-video">
+    <div
+      className="relative aspect-video"
+      onClick={handlePlayPause}
+      onContextMenu={(e) => e.preventDefault()} // Disable right-click
+    >
       {!isReady && !isLocked && (
         <div className="absolute inset-0 flex items-center justify-center bg-slate-800">
           <Loader2 className="h-8 w-8 animate-spin text-secondary" />
@@ -77,14 +67,40 @@ export const VideoPlayer = ({
         </div>
       )}
       {!isLocked && (
-        <ReactPlayer
-        url={videoUrl?.toString()}
-        controls
-        width="100%"
-        height="100%"
-        onEnded={onEnd}
-        onReady={() => setIsReady(true)}
-      />
+        <>
+          <ReactPlayer
+            ref={playerRef}
+            url={videoUrl?.toString()}
+            controls={false} // Hide default controls
+            width="100%"
+            height="100%"
+            onReady={() => setIsReady(true)}
+            onProgress={handleProgress} // Update progress
+            onDuration={handleDuration} // Update duration
+            playing={isPlaying}
+          />
+          {!isPlaying && (
+            <div className="absolute inset-0 flex items-center justify-center">
+              <button
+                onClick={(e) => {
+                  e.stopPropagation(); // Prevent click event from propagating to the parent div
+                  handlePlayPause();
+                }}
+                className="bg-secondary p-4 rounded-full"
+              >
+                <Play className="text-black h-8 w-8" />
+              </button>
+            </div>
+          )}
+          <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 w-full flex flex-col items-center">
+            <div className="relative w-full bg-gray-800 h-2 rounded-full">
+              <div
+                className="absolute top-0 left-0 bg-secondary h-full rounded-full"
+                style={{ width: `${progressPercentage}%` }}
+              />
+            </div>
+          </div>
+        </>
       )}
     </div>
   );

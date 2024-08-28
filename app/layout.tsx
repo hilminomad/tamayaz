@@ -4,6 +4,7 @@ import { Rubik } from 'next/font/google';
 
 // Authentication
 import { ClerkProvider } from '@clerk/nextjs';
+import { frFR } from '@clerk/localizations'
 
 // Providers
 import { ToastProvider } from '@/components/providers/toaster-provider';
@@ -22,7 +23,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider localization={frFR}>
       <html lang="en">
         <body className={inter.className}>
           <ConfettiProvider />

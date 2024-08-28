@@ -58,6 +58,13 @@
     snakecase-keys "3.2.1"
     tslib "2.4.1"
 
+"@clerk/localizations@^2.6.1":
+  version "2.6.1"
+  resolved "https://registry.npmjs.org/@clerk/localizations/-/localizations-2.6.1.tgz"
+  integrity sha512-CsYkl7HUuqXYl86Y2aOTQE4kiHp2u8/AI4VpBFO9M7rZHd3PrbOBcJw2S1KHo+tLnRCoJi1mxkor8t+J55DyQQ==
+  dependencies:
+    "@clerk/types" "4.14.0"
+
 "@clerk/nextjs@^4.29.3":
   version "4.29.5"
   resolved "https://registry.npmjs.org/@clerk/nextjs/-/nextjs-4.29.5.tgz"
@@ -84,6 +91,13 @@
   version "3.60.0"
   resolved "https://registry.npmjs.org/@clerk/types/-/types-3.60.0.tgz"
   integrity sha512-f1A16wFh5MtikxEo7o6vAVX7FxpqC1YmzA6c4ugwq5MH8J2mvIM/LwNVIHgNpZkn/s/G+BUhBcJJmUXqajDK2Q==
+  dependencies:
+    csstype "3.1.1"
+
+"@clerk/types@4.14.0":
+  version "4.14.0"
+  resolved "https://registry.npmjs.org/@clerk/types/-/types-4.14.0.tgz"
+  integrity sha512-d3MUcWtXGTOS7QYCRVrOra7NYAGRiNWlb+Ke2KMSb+Z3lea6WlKeHa18uVnAkIVxBXtHlzdU2kwW0PrHkx8j9Q==
   dependencies:
     csstype "3.1.1"
 

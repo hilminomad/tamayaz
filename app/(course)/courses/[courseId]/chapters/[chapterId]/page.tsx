@@ -1,10 +1,11 @@
 import { redirect } from 'next/navigation';
 
 import { auth } from '@clerk/nextjs';
-import { File } from 'lucide-react';
+import { ArrowLeft, File } from 'lucide-react';
 
 import { Banner } from '@/components/banner';
 import { Preview } from '@/components/preview';
+import { Button } from '@/components/ui/button';
 import { Separator } from '@/components/ui/separator';
 import { VideoPlayer } from './_components/video-player';
 import { CourseEnrollButton } from './_components/course-enroll-button';
@@ -12,6 +13,8 @@ import { CourseProgressButton } from './_components/course-progress-button';
 
 // DB & Actions
 import { getChapter } from '@/actions/get-chapter';
+import { CourseQuestions } from './_components/course-questions';
+import Link from 'next/link';
 
 const ChapterIdPage = async ({
   params,
@@ -28,6 +31,7 @@ const ChapterIdPage = async ({
     chapter,
     course,
     attachments,
+    questions,
     nextChapter,
     userProgress,
     purchase,
@@ -37,10 +41,10 @@ const ChapterIdPage = async ({
     courseId: params.courseId,
   });
 
-  if (!chapter || !course) {
+  if (!chapter || !course || !questions ) {
     return redirect('/');
   }
-
+  console.log(questions)
   const isLocked = !chapter.isFree && !purchase;
   const completeOnEnd = !!purchase && !userProgress?.isCompleted;
 
@@ -55,6 +59,16 @@ const ChapterIdPage = async ({
           variant="warning"
         />
       )}
+      <Link
+        href={`/courses/${params.courseId}`}
+        className="flex items-center text-sm hover:opacity-75 transition font-medium px-4 my-4"
+      >
+        <Button>
+        <ArrowLeft className="h-4 w-4 mr-2 font-medium" />
+         <p className='font-medium'>Retour à la page du cours</p> 
+        </Button>
+        
+      </Link>
       <div className="flex flex-col max-w-4xl mx-auto pb-20">
         <div className="p-4">
           <VideoPlayer
@@ -64,7 +78,7 @@ const ChapterIdPage = async ({
             nextChapterId={nextChapter?.id}   
   
             isLocked={isLocked}
-            completeOnEnd={completeOnEnd}
+            
             videoUrl={chapter.videoUrl ?? undefined} 
           />
         </div>
@@ -107,6 +121,21 @@ const ChapterIdPage = async ({
               </div>
             </>
           )}
+          <Separator/>
+          
+          {
+            purchase && 
+          
+          <CourseQuestions
+            courseId={params.courseId}
+            chapterId={params.chapterId}   
+            questions={questions}
+            isCompleted={!!userProgress?.isCompleted}
+            isFirstTime={!!userProgress?.isFirstTime}
+            nextChapterId={nextChapter?.id}   
+            completeOnEnd={completeOnEnd}       
+          />
+          } 
         </div>
       </div>
     </div>
