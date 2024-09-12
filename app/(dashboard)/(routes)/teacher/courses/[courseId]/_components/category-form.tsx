@@ -36,37 +36,48 @@ const formSchema = z.object({
 });
 
 const CategoryForm = ({
-  initialData,
+  initialData: initialCourseData,
   courseId,
   options,
 }: CategoryFormProps) => {
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
 
+  // Store local state for updated course data
+  const [courseData, setCourseData] = useState(initialCourseData);
+
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      categoryId: initialData?.categoryId || '',
+      categoryId: courseData?.categoryId || '',
     },
   });
 
   const { isSubmitting, isValid } = form.formState;
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
+    console.log('Form values:', values);
     try {
       await axios.patch(`/api/courses/${courseId}`, values);
       toast.success('Cours mis à jour');
       toggleEdit();
-      router.refresh();
+
+      // Update local state with the new category after success
+      setCourseData((prev) => ({
+        ...prev,
+        categoryId: values.categoryId,
+      }));
+
+      router.refresh(); // You can keep this to ensure the overall data is up-to-date.
     } catch (error) {
       toast.error("Une erreur s'est produite");
     }
   };
 
   const selectedOption = options.find(
-    (option) => option.value === initialData.categoryId
+    (option) => option.value === courseData.categoryId
   );
 
   return (
@@ -88,7 +99,7 @@ const CategoryForm = ({
         <p
           className={cn(
             'text-sm mt-2',
-            !initialData.categoryId && 'text-slate-500 italic'
+            !courseData.categoryId && 'text-slate-500 italic'
           )}
         >
           {selectedOption?.label || 'Aucune categorie'}
@@ -114,7 +125,7 @@ const CategoryForm = ({
             />
             <div className="flex items-center gap-x-2">
               <Button disabled={!isValid || isSubmitting} type="submit">
-              Enregistrer
+                Enregistrer
               </Button>
             </div>
           </form>

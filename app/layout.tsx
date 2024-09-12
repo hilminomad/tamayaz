@@ -9,12 +9,13 @@ import { frFR } from '@clerk/localizations'
 // Providers
 import { ToastProvider } from '@/components/providers/toaster-provider';
 import { ConfettiProvider } from '@/components/providers/confetti-provider';
+import { Footer } from '@/components/footer';
 
 const inter = Rubik({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-  title: 'Learning Management System',
-  description: 'Making online teaching easy',
+  title: 'Tamayaz',
+  description: "Votre plateforme d'apprentissage",
 };
 
 export default function RootLayout({
@@ -26,9 +27,13 @@ export default function RootLayout({
     <ClerkProvider localization={frFR}>
       <html lang="en">
         <body className={inter.className}>
+        <div className="flex flex-col min-h-screen">
           <ConfettiProvider />
           <ToastProvider />
           {children}
+          
+        </div>
+        <Footer/>
         </body>
       </html>
     </ClerkProvider>

@@ -28,7 +28,7 @@ export const CourseCard = ({
   return (
     <Link href={`/courses/${id}`}>
       <div className="group hover:shadow-sm transition overflow-hidden border rounded-lg p-3 h-full">
-        <div className="relative w-full aspect-video rounded-md overflow-hidden">
+        <div className="relative w-full aspect-video rounded-md overflow-hidden group-hover:scale-110 transition">
           <Image fill className="object-cover" alt={title} src={imageUrl} />
         </div>
         <div className="flex flex-col pt-2">

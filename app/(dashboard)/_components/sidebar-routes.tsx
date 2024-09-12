@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname } from 'next/navigation';
-import { Layout, Compass, List, BarChart } from 'lucide-react';
+import { Layout, Compass, List, BarChart, FileEdit, Plus, PlusCircle, FileStack, SquareStack, ListFilter, ListOrdered, Sheet, BookMarked } from 'lucide-react';
 
 import SidebarItem from './sidebar-item';
 
@@ -12,9 +12,19 @@ const guestRotues = [
     href: '/dashboard',
   },
   {
-    icon: Compass,
+    icon: ListOrdered,
     label: 'Cours',
+    href: '/courses',
+  },
+  {
+    icon: Compass,
+    label: 'Recherche',
     href: '/search',
+  },
+  {
+    icon: BookMarked,
+    label: 'Blog',
+    href: '/blog',
   },
 ];
 
@@ -28,6 +38,16 @@ const teacherRotues = [
     icon: BarChart,
     label: 'Analytique',
     href: '/teacher/analytics',
+  },
+  {
+    icon: PlusCircle,
+    label: 'Inscrire',
+    href: '/teacher/enroll',
+  },
+  {
+    icon: FileEdit,
+    label: 'Articles',
+    href: '/teacher/articles',
   },
 ];
 

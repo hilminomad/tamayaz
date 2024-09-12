@@ -18,19 +18,18 @@ const NavbarRoutes = () => {
 
   const isTeacherPage = pathname?.startsWith('/teacher');
   const isCoursePage = pathname?.startsWith('/courses');
+  const isBlogPage = pathname?.startsWith('/blog');
   const isSearchPage = pathname === '/search';
   const isHomePage = pathname === '/';
 
-  if (isHomePage){
+  if (isHomePage || isBlogPage){
     if(!userId){
       return(
         <>
-          <div className="ml-16 hidden md:block">
-            <SearchInput />
-          </div>
+          
           <div className='flex gap-x-2 ml-auto'>
           <Link href="/sign-up">
-            <Button size="sm" variant="ghost">
+            <Button size="sm" variant="outline">
               Se connecter
             </Button>
           </Link>
@@ -54,11 +53,11 @@ const NavbarRoutes = () => {
         </div>
       )}
       <div className="flex gap-x-2 ml-auto">
-        {isTeacherPage || isCoursePage ? (
+        {isTeacherPage ? (
           <Link href="/dashboard">
             <Button size="sm" variant="outline">
               <Book className="h-4 w-4 mr-2" />
-              Mode étudiant
+              Tableau de bord
             </Button>
           </Link>
         ) : isTeacher(userId) ? (

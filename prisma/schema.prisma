@@ -17,6 +17,7 @@ model Course {
   imageUrl String? @db.Text
   price Float?
   isPublished Boolean @default(false)
+  isCourse Boolean @default(true)
 
   categoryId String?
   category Category? @relation(fields: [categoryId], references: [id])
@@ -35,6 +36,8 @@ model Course {
 model Category {
   id String @id @default(uuid())
   name String @unique
+  price Float?
+  bundlePurchases BundlePurchase[]
   courses Course[]
 }
 
@@ -132,6 +135,48 @@ model Purchase {
 
   @@index([courseId])
   @@unique([userId, courseId])
+}
+
+model BundlePurchase {
+  id String @id @default(uuid())
+  userId String
+  
+  categoryId String
+  category Category @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+
+  @@index([categoryId])
+  @@unique([userId, categoryId])
+}
+
+model Article {
+  id String @id @default(uuid())
+  userId String
+  title String @db.Text
+  description String? @db.Text
+  texte String? @db.Text
+  imageUrl String? @db.Text
+  price Float?
+  isPublished Boolean @default(false)
+
+  tagId String?
+  tag Tag? @relation(fields: [tagId], references: [id])
+
+  
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt()
+
+  @@index([tagId])
+  @@fulltext([title])
+}
+
+model Tag {
+  id String @id @default(uuid())
+  name String @unique
+  articles Article[]
 }
 
 model StripeCustomer {

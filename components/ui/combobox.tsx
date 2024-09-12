@@ -44,8 +44,8 @@ export const Combobox = ({ options, value, onChange }: ComboboxProps) => {
       </PopoverTrigger>
       <PopoverContent className="w-full p-0">
         <Command>
-          <CommandInput placeholder="Formation ou Cours?" />
-          <CommandEmpty>Aucune categorie.</CommandEmpty>
+          <CommandInput placeholder="..." />
+          <CommandEmpty>Introuvable</CommandEmpty>
           <CommandGroup>
             {options.map((option) => (
               <CommandItem

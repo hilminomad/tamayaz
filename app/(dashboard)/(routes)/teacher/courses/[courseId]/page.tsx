@@ -22,6 +22,7 @@ import PriceForm from './_components/price-form';
 import AttachmentForm from './_components/attachment-form';
 import ChaptersForm from './_components/chapters-form';
 import Actions from './_components/actions';
+import IsCourseForm from './_components/is-course-form';
 
 const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
   // To verify if the course creator, is the one editing it
@@ -67,7 +68,7 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
     course.description,
     course.imageUrl,
     course.price,
-    course.categoryId,
+    course.isCourse,
     course.chapters.some((chapter) => chapter.isPublished),
   ];
   // calculates the number of fields
@@ -114,7 +115,10 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
             <TitleForm initialData={course} courseId={course.id} />
             <DescriptionForm initialData={course} courseId={course.id} />
             <ImageForm initialData={course} courseId={course.id} />
-            <CategoryForm
+            <IsCourseForm initialData={course} courseId={course.id}/>
+            {
+              course.isCourse === true && 
+              <CategoryForm
               initialData={course}
               courseId={course.id}
               options={categories.map((category) => ({
@@ -122,6 +126,8 @@ const CourseIdPage = async ({ params }: { params: { courseId: string } }) => {
                 value: category.id,
               }))}
             />
+            }
+            
           </div>
           <div className="space-y-6">
             <div>

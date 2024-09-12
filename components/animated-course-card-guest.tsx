@@ -28,7 +28,7 @@ export const CourseCard = ({
   return (
     <Link href={`/courses/${id}`}>
       <div className="group relative aspect-video hover:shadow-sm transition duration-1000 overflow-hidden border rounded-lg  h-full">
-      <Image fill className="absolute x-0 y-0 z-[-1] w-full h-full object-cover" alt={title} src={imageUrl} />
+      <Image fill className="absolute x-0 y-0 z-[-1] w-full h-full object-cover transition-all duration-1000 group-hover:scale-125" alt={title} src={imageUrl} />
        
         <div className="flex flex-col h-full justify-between ">
           <div className='relative -translate-y-full w-full flex justify-between items-center duration-1000 bg-gradient-to-b from-black to-transparent p-3 group-hover:translate-y-0 transition line-clamp-2'>
@@ -45,7 +45,7 @@ export const CourseCard = ({
             </p>
           </div>
           <div className='p-3 pt-5 w-full bg-gradient-to-t from-black to-transparent flex flex-col transition-all duration-1000 group-hover:items-center'>
-            <div className="text-xl text-slate-200 md:text-base font-medium text-white group-hover:text-2xl transitionall duration-1000 line-clamp-2">
+            <div className="text-xl text-slate-200 md:text-base font-medium group-hover:text-2xl transitionall duration-1000 line-clamp-2">
               {title}
             </div>
             <p className="text-xs text-slate-300 group-hover:text-slate-200 transition-all duration-1000 line-clamp-2 text-muted-foreground">{category}</p> 
