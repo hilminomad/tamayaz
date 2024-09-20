@@ -52,7 +52,7 @@ const ListingPage = async () => {
 
   // Pass the fetched data to the ToggleCourses component
   return (
-    <div className="flex w-full h-full min-h-screen flex-col items-center justify-start">
+    <div className="flex w-full h-full xl:min-h-[1100px] md:min-h-[1360px] min-h-[2280px] flex-col items-center justify-start">
       <ToggleCourses categories={categories} formationCourses={formationCourses} />
     </div>
   );

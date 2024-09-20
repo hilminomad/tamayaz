@@ -35,7 +35,7 @@ const NavbarRoutes = () => {
           </Link>
           <Link href="/sign-in">
             <Button size="sm" variant="default">
-              S'inscrire
+              S&apos;inscrire
             </Button>
           </Link>
           </div>        
@@ -66,8 +66,16 @@ const NavbarRoutes = () => {
               Mode admin
             </Button>
           </Link>
-        ) : null}
+        ) : userId ? <Link href="/dashboard">
+        <Button size="sm" variant="outline">
+          <Book className="h-4 w-4 mr-2" />
+          Tableau de bord
+        </Button>
+      </Link> : null}
+        <div className='h-8 w-8'>
         <UserButton afterSignOutUrl="/" />
+        </div>
+        
       </div>
     </>
   );

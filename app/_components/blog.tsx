@@ -10,7 +10,7 @@ export default async function BlogSection() {
 
   return(
     <>
-      <div className="w-full min-h-screen p-6 flex flex-col justify-center items-center bg-gradient-to-l from-blue-900 to-black">
+      <div className="w-full min-h-screen py-16 p-6 flex flex-col justify-center items-center bg-gradient-to-l from-blue-900 to-black">
         <div className="grid md:grid-cols-2 gap-4 w-full max-w-7xl">
           {/* First column with one element spanning three rows */}
           {items.length > 0 && (

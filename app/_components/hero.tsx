@@ -16,7 +16,7 @@ export default function Hero() {
                 <div className="flex gap-4">
                     {
                         !userId && <Link href='/sign-up'>
-                        <Button variant='outline' size='lg'>S'incrire</Button>
+                        <Button variant='outline' size='lg'>S&apos;incrire</Button>
                     </Link>
                     }
                     

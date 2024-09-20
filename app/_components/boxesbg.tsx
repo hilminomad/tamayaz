@@ -8,7 +8,7 @@ export function MacbookScrollDemo() {
       <MacbookScroll
         title={
           <span>
-            Une plateforme qui rend l'éducation plus
+            Une plateforme qui rend l&apos;éducation plus
             <br/> Simplifiée et Amusante
           </span>            
           

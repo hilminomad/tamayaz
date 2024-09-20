@@ -25,6 +25,7 @@ import { cn } from '@/lib/utils';
 
 import { Course } from '@prisma/client';
 
+
 interface IsCourseFormProps {
   initialData: Course;
   courseId: string;
@@ -54,11 +55,14 @@ const IsCourseForm = ({
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      const payload = values.isCourse ? values : { ...values, categoryId: null };
+      // If `isCourse` is true, keep the categoryId, otherwise set it to null
+      
+
       await axios.patch(
         `/api/courses/${courseId}/`,
-        payload
+        values
       );
+
       toast.success('Mis à jour');
       toggleEdit();
       router.refresh();
@@ -70,11 +74,9 @@ const IsCourseForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-      Cours ou Formation
+        Cours ou Formation
         <Button onClick={toggleEdit} variant="ghost">
-          {isEditing ? (
-            <>Annuler</>
-          ) : (
+          {isEditing ? 'Annuler' : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
               Modifier
@@ -90,18 +92,15 @@ const IsCourseForm = ({
           )}
         >
           {initialData.isCourse ? (
-            <p>C'est un cours.</p>
+            <p>C&apos;est un cours.</p>
           ) : (
-            <p>C'est une formation.</p>
+            <p>C&apos;est une formation.</p>
           )}
         </div>
       )}
       {isEditing && (
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="space-y-4 mt-4"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             <FormField
               control={form.control}
               name="isCourse"
@@ -115,15 +114,15 @@ const IsCourseForm = ({
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormDescription>
-                    Cochez cette case si vous souhaitez changer 
+                    Cochez pour changer 
                     </FormDescription>
                   </div>
                 </FormItem>
               )}
             />
-            <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} type="submit">
-                Enregistrer
+            <div className="mt-4">
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? 'Mise à jour...' : 'Confirmer'}
               </Button>
             </div>
           </form>

@@ -123,7 +123,7 @@ const ChapterIdPage = async ({
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={Eye} />
-                <h2 className="text-xl">Paramètres d'accès</h2>
+                <h2 className="text-xl">Paramètres d&apos;accès</h2>
               </div>
               <ChapterAccessForm
                 initialData={chapter}

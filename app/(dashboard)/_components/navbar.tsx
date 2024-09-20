@@ -16,17 +16,23 @@ const Navbar = () => {
   const isTermsPage = pathname === '/terms-and-conditions';
   const isFaqPage = pathname === '/faq';
   const isBlog = pathname.startsWith('/blog')
+  const isTeacher = pathname.startsWith('/teacher')
 
   
   return (
-    <div className={cn ("p-6 border-b h-full flex items-center bg-white" 
-    ,isBlog && "bg-black"
+    <div className={cn(
+      "p-6 border-b h-full flex items-center bg-white",
+      {
+        "bg-black": isBlog,
+        "bg-sky-50 border-b-4 border-sky-700": isTeacher
+      }
     )}>
+      {(!isHomePage || !isTermsPage || !isFaqPage || !isBlog) && <MobileSidebar />}
       {isHomePage && <Logo/>}
       {isTermsPage && <Logo/>}
       {isFaqPage && <Logo/>}
       {isBlog && <LogoWhite/>}
-      <MobileSidebar />
+     
       <NavbarRoutes />
     </div>
   );

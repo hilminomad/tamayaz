@@ -12,7 +12,7 @@ interface CategoryGridProps {
 const CategoryGrid = ({ categories }: CategoryGridProps) => {
   //const courseLength = categories.cou
   return (
-    <div className="w-full grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 max-w-6xl">
+    <div className="w-full grid min-h-[2104px] grid-cols-1 md:min-h-[1192px] md:grid-cols-2 xl:min-h-[888px] xl:grid-cols-3 gap-6 max-w-6xl mb-8">
       {categories.length > 0 &&
         categories.map((category) => (
           <Link href={`/courses/semester/${category.id}`} key={category.id}>

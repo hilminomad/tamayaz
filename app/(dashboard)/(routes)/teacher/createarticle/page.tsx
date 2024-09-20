@@ -69,7 +69,7 @@ const CreateArticlePage = () => {
               name="title"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Titre de l'article</FormLabel>
+                  <FormLabel>Titre de l&apos;article</FormLabel>
                   <FormControl>
                     <Input
                       disabled={isSubmitting}

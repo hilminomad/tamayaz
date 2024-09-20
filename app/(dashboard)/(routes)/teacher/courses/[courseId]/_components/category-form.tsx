@@ -50,6 +50,7 @@ const CategoryForm = ({
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
+
     defaultValues: {
       categoryId: courseData?.categoryId || '',
     },
@@ -65,12 +66,13 @@ const CategoryForm = ({
       toggleEdit();
 
       // Update local state with the new category after success
+      
       setCourseData((prev) => ({
         ...prev,
         categoryId: values.categoryId,
       }));
-
-      router.refresh(); // You can keep this to ensure the overall data is up-to-date.
+      router.refresh();
+       // You can keep this to ensure the overall data is up-to-date.
     } catch (error) {
       toast.error("Une erreur s'est produite");
     }
@@ -81,7 +83,7 @@ const CategoryForm = ({
   );
 
   return (
-    <div className="mt-6 border bg-slate-100 rounded-md p-4">
+    <div className="mt-6  mb-28 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         La categorie du cours
         <Button onClick={toggleEdit} variant="ghost">
@@ -115,9 +117,9 @@ const CategoryForm = ({
               control={form.control}
               name="categoryId"
               render={({ field }) => (
-                <FormItem>
-                  <FormControl>
-                    <Combobox options={options} {...field} />
+                <FormItem >
+                  <FormControl>                    
+                    <Combobox options={options} {...field} />                    
                   </FormControl>
                   <FormMessage />
                 </FormItem>

@@ -105,7 +105,7 @@ const EnrollForm = ({ options, students }: EnrollFormProps) => {
                 </FormItem>
               )}
             />
-            <p>Selection d'étudiant</p>
+            <p>Selection d&apos;étudiant</p>
             <FormField
               control={form.control}
               name="studentId"

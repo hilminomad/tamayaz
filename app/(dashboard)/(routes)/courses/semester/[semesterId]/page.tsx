@@ -96,7 +96,7 @@ export default async function SemesterIdPage({ params }: { params: { semesterId:
     <div className="p-6 my-8 flex w-full max-w-7xl flex-col items-center">
       {
         category.courses.length > 0 && category.courses.map((course) => (
-          <Link className="w-full" href='/' key={course.id}>
+          <Link className="w-full" href={`/courses/${course.id}`} key={course.id}>
             <SemesterCourse course={course}/>
           </Link>
         ))

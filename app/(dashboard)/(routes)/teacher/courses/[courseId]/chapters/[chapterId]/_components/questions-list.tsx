@@ -85,7 +85,7 @@ export const QuestionsList = ({
           
           {...provided.droppableProps} ref={provided.innerRef}>
             {questions.map((question, index) => (
-              <div>
+              
               <Draggable
                 key={question.id}
                 draggableId={question.id}
@@ -133,7 +133,7 @@ export const QuestionsList = ({
               </Draggable>
               
                                           
-              </div>
+              
               
             ))}
             {provided.placeholder}

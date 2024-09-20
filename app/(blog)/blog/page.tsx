@@ -28,10 +28,13 @@ const BlogPage = async ({ searchParams }: SearchPageProps) => {
   return (
     <>
       <BlogBanner items={bannerArticles}/>
-      <div className='w-full px-6 flex justify-center'>
-        <Categories items={tags} />
+      <div className='w-full my-8'>
+        <div className='w-full px-6 flex justify-center'>
+          <Categories items={tags} />
+        </div>
+        <ArticlesList items={articles}/>
       </div>
-      <ArticlesList items={articles}/>
+      
     </>
   )
 

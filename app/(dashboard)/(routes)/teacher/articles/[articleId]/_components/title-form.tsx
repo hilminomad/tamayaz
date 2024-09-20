@@ -61,7 +61,7 @@ const TitleForm = ({ initialData, articleId }: TitleFormProps) => {
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Le titre de l'article
+        Le titre de l&apos;article
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Annuler</>

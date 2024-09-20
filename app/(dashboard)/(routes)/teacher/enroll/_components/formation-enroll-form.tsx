@@ -107,7 +107,7 @@ const FormationEnrollForm = ({ options, students }: FormationEnrollFormProps) =>
                 </FormItem>
               )}
             />
-            <p className='font-semibold'>Selection d'étudiant</p>
+            <p className='font-semibold'>Selection d&apos;étudiant</p>
             <FormField
               control={form.control}
               name="studentId"

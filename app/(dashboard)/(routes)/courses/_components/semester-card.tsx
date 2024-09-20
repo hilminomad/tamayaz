@@ -17,7 +17,7 @@ const CategoryCard = ({ category }: CategoryCardProps) => {
   return (
     <div
       className={cn(
-        "group relative min-h-[240px] overflow-hidden flex flex-col justify-between items-center p-3 rounded-xl bg-slate-300 bg-opacity-80 w-full",
+        "group relative h-[240px] overflow-hidden flex flex-col justify-between items-center p-3 rounded-xl bg-slate-300 bg-opacity-80 w-full",
         category.bundlePurchases.length > 0 && "bg-emerald-300 bg-opacity-70"
       )}
     >

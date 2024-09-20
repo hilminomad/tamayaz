@@ -78,7 +78,7 @@ const ChapterAccessForm = ({
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Modifier l'accès
+              Modifier l&apos;accès
             </>
           )}
         </Button>
@@ -93,7 +93,7 @@ const ChapterAccessForm = ({
           {initialData.isFree ? (
             <p>Ce chapitre est disponible gratuitement.</p>
           ) : (
-            <p>Ce chapitre n'est pas gratuit.</p>
+            <p>Ce chapitre n&apos;est pas gratuit.</p>
           )}
         </div>
       )}

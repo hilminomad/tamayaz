@@ -25,9 +25,9 @@ export const Footer = () => {
           </Link>
         </div>
         <div className="p-3 flex md:text-start text-center   flex-col gap-2">
-          <p className="text-white font-medium">Liens d'utilsateur</p>
+          <p className="text-white font-medium">Liens d&apos;utilsateur</p>
           <Link  href='/sign-up'>
-            <p className="text-slate-200 transition-all font-light  hover:text-white">S'inscrire</p>          
+            <p className="text-slate-200 transition-all font-light  hover:text-white">S&apos;inscrire</p>          
           </Link>
           <Link  href='/sign-in'>
             <p className="text-slate-200 transition-all font-light  hover:text-white">Se connecter</p>

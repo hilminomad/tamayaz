@@ -48,33 +48,22 @@ export async function PATCH(
     const { userId } = auth();
     const { courseId } = params;
     const values = await req.json();
-    console.log(values)
 
     if (!userId) {
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
-    const course = await db.course.findUnique({
+    const course = await db.course.update({
       where: {
         id: courseId,
-      },
-    });
-
-    if (!course || course.userId !== userId) {
-      return new NextResponse('Unauthorized', { status: 403 });
-    }
-
-    const updatedCourse = await db.course.update({
-      where: {
-        id: courseId,
+        userId,
       },
       data: {
         ...values,
-        categoryId: values.isCourse ? values.categoryId : null,
       },
     });
 
-    return NextResponse.json(updatedCourse);
+    return NextResponse.json(course);
   } catch (error) {
     console.log('[COURSE_ID_PATCH]', error);
     return new NextResponse('Internal Error', { status: 500 });

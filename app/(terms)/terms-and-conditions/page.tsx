@@ -11,27 +11,27 @@ const TermsAndConditions: NextPage = () => {
 
       <div className="max-w-4xl mx-auto bg-white shadow-md rounded-lg p-8">
         <h1 className="text-3xl font-semibold mb-6 text-center text-gray-900">
-          Conditions Générales d'Utilisation
+          Conditions Générales d&apos;Utilisation
         </h1>
 
         <section className="mb-6">
           <h2 className="text-2xl font-semibold mb-4">1. Introduction</h2>
           <p className="text-base">
-            Bienvenue sur notre plateforme d'apprentissage en ligne. En utilisant ce site, vous acceptez les conditions générales décrites ci-dessous. Veuillez les lire attentivement avant de continuer à utiliser notre service.
+            Bienvenue sur notre plateforme d&apos;apprentissage en ligne. En utilisant ce site, vous acceptez les conditions générales décrites ci-dessous. Veuillez les lire attentivement avant de continuer à utiliser notre service.
           </p>
         </section>
 
         <section className="mb-6">
           <h2 className="text-2xl font-semibold mb-4">2. Accès à la plateforme</h2>
           <p className="text-base">
-            L'accès à notre plateforme est réservé aux utilisateurs enregistrés. Vous devez fournir des informations exactes et complètes lors de votre inscription.
+            L&apos;accès à notre plateforme est réservé aux utilisateurs enregistrés. Vous devez fournir des informations exactes et complètes lors de votre inscription.
           </p>
         </section>
 
         <section className="mb-6">
           <h2 className="text-2xl font-semibold mb-4">3. Propriété intellectuelle</h2>
           <p className="text-base">
-            Tous les contenus présents sur cette plateforme (cours, vidéos, textes, images) sont protégés par des droits d'auteur. Vous ne pouvez pas reproduire, distribuer ou modifier ces contenus sans l'autorisation explicite de leur propriétaire.
+            Tous les contenus présents sur cette plateforme (cours, vidéos, textes, images) sont protégés par des droits d&apos;auteur. Vous ne pouvez pas reproduire, distribuer ou modifier ces contenus sans l&apos;autorisation explicite de leur propriétaire.
           </p>
         </section>
 
@@ -52,7 +52,7 @@ const TermsAndConditions: NextPage = () => {
         <section className="mb-6">
           <h2 className="text-2xl font-semibold mb-4">6. Contact</h2>
           <p className="text-base">
-            Pour toute question ou préoccupation concernant ces conditions, veuillez nous contacter à l'adresse email suivante : support@votreplateforme.com.
+            Pour toute question ou préoccupation concernant ces conditions, veuillez nous contacter à l&apos;adresse email suivante : contact@tamayaz.com.
           </p>
         </section>
 

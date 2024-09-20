@@ -70,7 +70,7 @@ const ArticleDescriptionForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-      Texte de l'article
+      Texte de l&apos;article
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Annuler</>
