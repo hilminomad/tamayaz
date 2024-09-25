@@ -32,10 +32,9 @@ export async function POST(request: NextRequest) {
     const fileStream = file.stream();
     const writeStream = createWriteStream(filepath);
 
-    // Convert Web API ReadableStream to Node.js Readable stream
     const readable = new Readable();
     readable._read = () => {}; // _read is required but you can noop it
-    
+
     await new Promise<void>((resolve, reject) => {
       const reader = fileStream.getReader();
       const push = async () => {
@@ -59,9 +58,3 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Error saving file' }, { status: 500 });
   }
 }
-
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
