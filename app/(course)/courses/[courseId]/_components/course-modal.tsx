@@ -10,6 +10,7 @@ import { db } from '@/lib/db';
 import Logo from '@/app/(dashboard)/_components/logo';
 import { CourseEnrollButton } from '../chapters/[chapterId]/_components/course-enroll-button';
 import { Book } from 'lucide-react';
+import CourseIdPage from '../page';
 
 interface CourseModalProps {
   course: Course & {
@@ -38,12 +39,28 @@ export const CourseModal = async ({
       },
     },
   });
+
+  const bundlePurchase = await db.bundlePurchase.findFirst({
+    where: {
+      userId: userId,
+      category: {
+        courses: {
+          some: {
+            id: course.id  // Use course.id instead of courseId
+          }
+        }
+      }
+    },
+    include: {
+      category: true
+    }
+  });
   
   const progress = course.chapters.map((chapter, index) => {
     !!chapter.userProgress?.[0]?.isFirstTime === false;
   })
 
-  console.log(progress)
+  const hasAccess = !!purchase || !!bundlePurchase;
 
   return (
     <div className="h-full flex flex-col shadow-sm">
@@ -62,7 +79,7 @@ export const CourseModal = async ({
                 
               </div>
           </div>
-          {!purchase ? 
+          {!hasAccess ? 
             <CourseEnrollButton
               courseId={course.id}
               price={course.price!}

@@ -29,7 +29,7 @@ const CategoryCard = ({ category }: CategoryCardProps) => {
         <div className="flex items-center gap-x-1 text-slate-800 shadow-sm">
           <FileStackIcon />
           <span>
-            {coursesLength} {coursesLength === 1 ? 'Chapitre' : 'Chapitres'}
+            {coursesLength} {coursesLength === 1 ? 'Module' : 'Modules'}
           </span>
         </div>
         {category.bundlePurchases.length > 0 ? (

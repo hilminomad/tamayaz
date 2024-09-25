@@ -8,7 +8,9 @@ import Logo from './logo';
 import LogoWhite from './logo-white';
 
 
+
 const Navbar = () => {
+  
 
   const pathname = usePathname()
 
@@ -27,11 +29,9 @@ const Navbar = () => {
         "bg-sky-50 border-b-4 border-sky-700": isTeacher
       }
     )}>
-      {(!isHomePage || !isTermsPage || !isFaqPage || !isBlog) && <MobileSidebar />}
-      {isHomePage && <Logo/>}
-      {isTermsPage && <Logo/>}
-      {isFaqPage && <Logo/>}
-      {isBlog && <LogoWhite/>}
+      
+      
+      {isBlog ? <LogoWhite/> : <Logo/>}
      
       <NavbarRoutes />
     </div>

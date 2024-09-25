@@ -33,13 +33,13 @@ export const Footer = () => {
             <p className="text-slate-200 transition-all font-light  hover:text-white">Se connecter</p>
           </Link>
           <Link  href='/terms-and-conditions'>
-            <p className="text-slate-200 transition-all font-light  hover:text-white">Politique de confidentialité</p>
-          </Link>
-          <Link  href='/faq'>
             <p className="text-slate-200 transition-all font-light  hover:text-white">Termes et conditions</p>
           </Link>
+          <Link  href='/faq'>
+            <p className="text-slate-200 transition-all font-light  hover:text-white">FAQ</p>
+          </Link>
         </div>
-        <div className="p-3 flex md:justify-center items-center gap-4">
+        <div className="p-3 w-full flex md:justify-start justify-center items-center gap-4">
           <Link href='/blog'>
             <Facebook/>
           </Link>
@@ -65,7 +65,7 @@ export const Footer = () => {
         <Image height={50} width={130} alt='CMI' src='/logocmi.png'/>
       </div>
       <div className="w-full text-slate-300 bg-slate-900 p-6">
-        <div className="w-full border-t-2 border-slate-300 ">
+        <div className="w-full border-t-2 border-slate-300 py-6">
           <p className="xs">Tamayaz &copy; 2024</p>
         </div>
       </div>

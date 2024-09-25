@@ -68,11 +68,11 @@ export default async function SemesterIdPage({ params }: { params: { semesterId:
       <div className='w-full max-w-7xl my-10 flex flex-col gap-4 md:flex-row items-center justify-between'>
         <div>
           <h1 className="font-bold text-[4rem] mb-4">{category.name}</h1>
-          <div className='flex text-slate-600'>
+          <div className='flex gap-1 text-slate-600'>
             <Book/>
             <p className='text-xl text-blue font-semibold'>
             {category.courses.length}
-            {category.courses.length === 1 ? ' Chapitre' : ' Chapitres'} 
+            {category.courses.length === 1 ? ' Module' : ' Modules'} 
             </p>
               
             </div>

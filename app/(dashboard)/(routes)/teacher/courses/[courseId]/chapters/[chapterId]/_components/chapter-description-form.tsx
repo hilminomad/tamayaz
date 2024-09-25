@@ -91,7 +91,7 @@ const ChapterDescriptionForm = ({
             !initialData.description && 'text-slate-500 italic'
           )}
         >
-          {!initialData.description && 'No description'}
+          {!initialData.description && 'Aucune description'}
           {initialData.description && (
             <Preview value={initialData.description} />
           )}

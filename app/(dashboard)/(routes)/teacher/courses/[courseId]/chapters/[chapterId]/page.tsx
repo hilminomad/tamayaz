@@ -12,7 +12,7 @@ import { Banner } from '@/components/banner';
 import ChapterTitleForm from './_components/chapter-title-form';
 import ChapterDescriptionForm from './_components/chapter-description-form';
 import ChapterAccessForm from './_components/chapter-access-form';
-import ChapterVideoForm from './_components/chapter-video-form';
+import ChapterVideoForm from './_components/chapter-video-local-form';
 import ChapterActions from './_components/chapter-actions';
 import ChapterQuizForm from './_components/chapter-quiz-form';
 import { CourseCard } from '@/components/animated-course-card-guest';

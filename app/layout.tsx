@@ -15,7 +15,7 @@ const inter = Rubik({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
   title: 'Tamayaz',
-  description: "Votre plateforme d'apprentissage",
+  description: "Votre plateforme d'apprentissage en ligne au Maroc, offrant des formations variées adaptées à vos besoins.",
 };
 
 export default function RootLayout({

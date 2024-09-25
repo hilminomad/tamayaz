@@ -11,15 +11,28 @@ async function main() {
     });
 
 
-     /*await database.tag.createMany({
+     await database.tag.createMany({
       data: [
-        { name: 'Economie' },
-        { name: 'Langues' },
+        { name: 'Finance' },
+        { name: 'AI' },
         { name: 'News' },
+        { name: 'Concours' },
+      ],
+    });
+
+    await database.tag.createMany({
+      data: [
+        { name: 'Bac' },
+        { name: 'S1' },
+        { name: 'S2' },
+        { name: 'S3' },
+        { name: 'S4' },
+        { name: 'S5' },
+        { name: 'S6' },
       ],
     });
     
-    await database.category.deleteMany({
+    /*await database.category.deleteMany({
       where: {
         name: { in: ['Cours', 'Formation'] },
       },

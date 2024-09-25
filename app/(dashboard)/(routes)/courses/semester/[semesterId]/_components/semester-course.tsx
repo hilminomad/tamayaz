@@ -14,7 +14,7 @@ export const SemesterCourse = ({course} : SemesterCourseProps) => {
         <div>
           <div className="flex gap-1 opacity-0 items-center translate-y-full transition-all group-hover:opacity-100 group-hover:translate-y-0">
             <BookOpen className="h-5 w-5"/>
-            <p>{course.chapters.length} {course.chapters.length === 1 ? 'Chapitre' : 'Chapitres'}</p>
+            <p>{course.chapters.length} {course.chapters.length === 1 ? ' Chapitre' : ' Chapitres'}</p>
           </div>
 
         </div>

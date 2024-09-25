@@ -84,7 +84,7 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
             !initialData.description && 'text-slate-500 italic'
           )}
         >
-          {initialData.description || 'No description'}
+          {initialData.description || 'Aucune description'}
         </p>
       )}
       {isEditing && (

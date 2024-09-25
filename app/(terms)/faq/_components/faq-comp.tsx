@@ -1,6 +1,6 @@
+"use client"
 // pages/faq.tsx
 import Navbar from '@/app/(dashboard)/_components/navbar';
-import { NextPage } from 'next';
 import { useState } from 'react';
 
 const faqs = [
@@ -31,7 +31,7 @@ const faqs = [
   },
 ];
 
-const FAQPage: NextPage = () => {
+export const Faq = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
 
   const toggleFAQ = (index: number) => {
@@ -70,4 +70,3 @@ const FAQPage: NextPage = () => {
   );
 };
 
-export default FAQPage;

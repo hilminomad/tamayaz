@@ -127,7 +127,7 @@ export const CourseQuestions: React.FC<CourseQuestionsProps> = ({
         router.refresh();
 
         if (nextChapterId) {
-          router.push(`/courses/${courseId}/chapters/${nextChapterId}`);
+          router.push(`/courses/${courseId}`);
         }
       } else {
         toast.error("Vous devez répondre à toutes les questions avant de terminer le chapitre.");

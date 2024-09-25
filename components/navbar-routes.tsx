@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-import { Book } from 'lucide-react';
+import { Book, GraduationCap } from 'lucide-react';
 
 import { SignInButton, UserButton, useAuth } from '@clerk/nextjs';
 
@@ -11,6 +11,7 @@ import { Button } from '@/components/ui/button';
 import { SearchInput } from './search-input';
 
 import { isTeacher } from '@/lib/teacher';
+import MobileSidebar from '@/app/(dashboard)/_components/mobile-sidebar';
 
 const NavbarRoutes = () => {
   const { userId } = useAuth();
@@ -53,29 +54,28 @@ const NavbarRoutes = () => {
         </div>
       )}
       <div className="flex gap-x-2 ml-auto">
-        {isTeacherPage ? (
+        {
+          isTeacher(userId)  &&
+            <Link href="/teacher/courses">
+              <Button size="sm" variant="outline">
+                <GraduationCap/>
+              </Button>
+            </Link>
+        }
+        
+        {userId && 
           <Link href="/dashboard">
             <Button size="sm" variant="outline">
               <Book className="h-4 w-4 mr-2" />
               Tableau de bord
             </Button>
           </Link>
-        ) : isTeacher(userId) ? (
-          <Link href="/teacher/courses">
-            <Button size="sm" variant="outline">
-              Mode admin
-            </Button>
-          </Link>
-        ) : userId ? <Link href="/dashboard">
-        <Button size="sm" variant="outline">
-          <Book className="h-4 w-4 mr-2" />
-          Tableau de bord
-        </Button>
-      </Link> : null}
+        
+        }
         <div className='h-8 w-8'>
         <UserButton afterSignOutUrl="/" />
         </div>
-        
+        <MobileSidebar/>
       </div>
     </>
   );
