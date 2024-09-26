@@ -5,15 +5,19 @@ import { Readable } from 'stream';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
 import { auth } from '@clerk/nextjs';
+import { isTeacher } from '@/lib/teacher';
 
 const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1GB
 
 export async function POST(request: NextRequest) {
+  console.log('Received request');
   try {
     // Check authentication
     const { userId } = auth();
+    console.log('User ID:', userId);
 
     if (!userId) {
+      console.log('Unauthorized: userId is null or undefined');
       return new NextResponse('Unauthorized', { status: 401 });
     }
 
@@ -62,7 +66,11 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ success: true, url: `/uploads/${filename}` });
   } catch (error) {
-    console.error('Error saving file:', error);
-    return NextResponse.json({ error: 'Error saving file' }, { status: 500 });
+    console.error('Error details:', error);
+    if (error instanceof Error) {
+      console.error('Error message:', error.message);
+      console.error('Error stack:', error.stack);
+    }
+    return NextResponse.json({ error: 'Error processing request' }, { status: 500 });
   }
 }
