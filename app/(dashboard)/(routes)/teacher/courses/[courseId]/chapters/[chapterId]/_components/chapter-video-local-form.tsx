@@ -184,7 +184,7 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
       )}
       {initialData.videoUrl && !isEditing && (
         <div className="text-xs text-muted-foreground mt-2">
-          Videos may take a few minutes to process. Refresh the page if the video doesn't appear.
+          Attendez la vidéo! Cela peut prendre quelque minutes.
         </div>
       )}
     </div>
