@@ -27,19 +27,41 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [tokenRefreshInterval, setTokenRefreshInterval] = useState<NodeJS.Timeout | null>(null);
+  const [currentToken, setCurrentToken] = useState<string | null>(null);
+  const tokenRefreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
   const refreshToken = async () => {
     try {
       const newToken = await getToken({ skipCache: true });
+      setCurrentToken(newToken);
       return newToken;
     } catch (error) {
       console.error('Error refreshing token:', error);
       return null;
     }
   };
+
+  const startTokenRefresh = () => {
+    if (tokenRefreshIntervalRef.current) {
+      clearInterval(tokenRefreshIntervalRef.current);
+    }
+    tokenRefreshIntervalRef.current = setInterval(refreshToken, 4 * 60 * 1000); // Refresh every 4 minutes
+  };
+
+  const stopTokenRefresh = () => {
+    if (tokenRefreshIntervalRef.current) {
+      clearInterval(tokenRefreshIntervalRef.current);
+      tokenRefreshIntervalRef.current = null;
+    }
+  };
+
+  useEffect(() => {
+    return () => {
+      stopTokenRefresh();
+    };
+  }, []);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -51,7 +73,7 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
       toggleEdit();
       router.refresh();
     } catch (error) {
-      toast.error('Error');
+      toast.error('Error updating chapter');
     }
   };
 
@@ -62,34 +84,24 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
     setIsUploading(true);
     setUploadProgress(0);
 
-    const formData = new FormData();
-    formData.append('video', file);
-
     try {
-      // Start token refresh mechanism
-      const refreshTokenAndUpdateHeader = async () => {
-        const newToken = await refreshToken();
-        if (newToken) {
-          axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
-        }
-      };
+      // Refresh token before starting upload
+      const initialToken = await refreshToken();
+      if (!initialToken) {
+        throw new Error('Failed to refresh token');
+      }
 
-      // Set up interval to refresh token every 4 minutes
-      const interval = setInterval(refreshTokenAndUpdateHeader, 4 * 60 * 1000);
-      setTokenRefreshInterval(interval);
+      // Start periodic token refresh
+      startTokenRefresh();
 
-      // Initial token fetch
-      const initialToken = await getToken();
+      const formData = new FormData();
+      formData.append('video', file);
 
-      // Create an Axios instance with the initial token
-      const axiosInstance = axios.create({
+      const response = await axios.post('/api/upload', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
           'Authorization': `Bearer ${initialToken}`,
         },
-      });
-
-      const response = await axiosInstance.post('/api/upload', formData, {
         onUploadProgress: (progressEvent) => {
           const percentCompleted = Math.round(
             (progressEvent.loaded * 100) / (progressEvent.total || file.size)
@@ -100,28 +112,16 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
 
       const videoUrl = response.data.url;
       onSubmit({ videoUrl });
+      toast.success('Video uploaded successfully');
     } catch (error) {
       console.error('Upload error:', error);
       toast.error('Error uploading video');
     } finally {
-      // Clean up interval when done
-      if (tokenRefreshInterval) {
-        clearInterval(tokenRefreshInterval);
-        setTokenRefreshInterval(null);
-      }
+      stopTokenRefresh();
       setIsUploading(false);
       setUploadProgress(0);
     }
   };
-
-  // Clean up the interval on unmount
-  useEffect(() => {
-    return () => {
-      if (tokenRefreshInterval) {
-        clearInterval(tokenRefreshInterval);
-      }
-    };
-  }, [tokenRefreshInterval]);
 
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
@@ -184,7 +184,7 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
       )}
       {initialData.videoUrl && !isEditing && (
         <div className="text-xs text-muted-foreground mt-2">
-          Attndez la vidéo! Cela peut prendre du temps 
+          Videos may take a few minutes to process. Refresh the page if the video doesn't appear.
         </div>
       )}
     </div>
