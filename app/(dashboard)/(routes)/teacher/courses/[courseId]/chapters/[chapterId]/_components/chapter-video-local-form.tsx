@@ -8,6 +8,8 @@ import { Pencil, PlusCircle, Video } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import ReactPlayer from 'react-player';
+import { getAuth } from '@clerk/nextjs/server';
+import { useAuth } from '@clerk/nextjs';
 
 interface ChapterVideoFormProps {
   initialData: { videoUrl?: string | null };
@@ -19,11 +21,8 @@ const formSchema = z.object({
   videoUrl: z.string().min(1),
 });
 
-const ChapterVideoForm = ({
-  initialData,
-  courseId,
-  chapterId,
-}: ChapterVideoFormProps) => {
+const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoFormProps) => {
+  const { getToken } = useAuth(); // Get the getToken function from useAuth
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
@@ -57,10 +56,18 @@ const ChapterVideoForm = ({
     formData.append('video', file);
 
     try {
+      // Get the JWT token from Clerk for Authorization
+      const token = await getToken();// You may use a specific token template or leave it blank for default.
+
       const response = await axios.post('/api/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Authorization': `Bearer ${token}`, // Add the token to the Authorization header
+        },
         onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / (progressEvent.total || file.size));
+          const percentCompleted = Math.round(
+            (progressEvent.loaded * 100) / (progressEvent.total || file.size)
+          );
           setUploadProgress(percentCompleted);
         },
       });
