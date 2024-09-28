@@ -21,44 +21,23 @@ const formSchema = z.object({
 });
 
 const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoFormProps) => {
-  const { getToken } = useAuth(); // Get the getToken function from useAuth
+  const { getToken } = useAuth();
   const router = useRouter();
   const [isEditing, setIsEditing] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [tokenRefreshTimeout, setTokenRefreshTimeout] = useState<NodeJS.Timeout | null>(null);
+  const [tokenRefreshInterval, setTokenRefreshInterval] = useState<NodeJS.Timeout | null>(null);
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
-  // Refresh token function
-  const refreshTokenBeforeExpiry = async () => {
-    const token = await getToken();
-    if (token) {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      const expirationTime = payload.exp * 1000; // Token expiration time
-      const currentTime = Date.now();
-      const timeUntilExpiry = expirationTime - currentTime;
-
-      // Set a timeout to refresh the token 30 seconds before it expires
-      const refreshTime = timeUntilExpiry - 30000;
-
-      if (refreshTime > 0) {
-        // Clear any existing timeout
-        if (tokenRefreshTimeout) {
-          clearTimeout(tokenRefreshTimeout);
-        }
-
-        // Set a new timeout for refreshing the token
-        const timeoutId = setTimeout(async () => {
-          await getToken(); // Refresh the token
-          console.log('Token refreshed successfully.');
-          // Call this function again to set up the next refresh
-          refreshTokenBeforeExpiry();
-        }, refreshTime);
-        
-        setTokenRefreshTimeout(timeoutId);
-      }
+  const refreshToken = async () => {
+    try {
+      const newToken = await getToken({ skipCache: true });
+      return newToken;
+    } catch (error) {
+      console.error('Error refreshing token:', error);
+      return null;
     }
   };
 
@@ -68,11 +47,11 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
         `/api/courses/${courseId}/chapters/${chapterId}`,
         values
       );
-      toast.success('Chapite modifié');
+      toast.success('Chapter modified');
       toggleEdit();
       router.refresh();
     } catch (error) {
-      toast.error('Erreur');
+      toast.error('Error');
     }
   };
 
@@ -87,18 +66,30 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
     formData.append('video', file);
 
     try {
-      // Start token refresh mechanism only when uploading starts
-      refreshTokenBeforeExpiry();
+      // Start token refresh mechanism
+      const refreshTokenAndUpdateHeader = async () => {
+        const newToken = await refreshToken();
+        if (newToken) {
+          axiosInstance.defaults.headers.common['Authorization'] = `Bearer ${newToken}`;
+        }
+      };
 
-      // Get the JWT token from Clerk for Authorization
-      const token = await getToken({});
-      console.log('Token:', token);
+      // Set up interval to refresh token every 4 minutes
+      const interval = setInterval(refreshTokenAndUpdateHeader, 4 * 60 * 1000);
+      setTokenRefreshInterval(interval);
 
-      const response = await axios.post('/api/upload', formData, {
+      // Initial token fetch
+      const initialToken = await getToken();
+
+      // Create an Axios instance with the initial token
+      const axiosInstance = axios.create({
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${token}`, // Add the token to the Authorization header
+          'Authorization': `Bearer ${initialToken}`,
         },
+      });
+
+      const response = await axiosInstance.post('/api/upload', formData, {
         onUploadProgress: (progressEvent) => {
           const percentCompleted = Math.round(
             (progressEvent.loaded * 100) / (progressEvent.total || file.size)
@@ -110,43 +101,44 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
       const videoUrl = response.data.url;
       onSubmit({ videoUrl });
     } catch (error) {
-      toast.error('Erreur');
+      console.error('Upload error:', error);
+      toast.error('Error uploading video');
     } finally {
-      // Clean up timeout when done
-      if (tokenRefreshTimeout) {
-        clearTimeout(tokenRefreshTimeout);
-        setTokenRefreshTimeout(null);
+      // Clean up interval when done
+      if (tokenRefreshInterval) {
+        clearInterval(tokenRefreshInterval);
+        setTokenRefreshInterval(null);
       }
       setIsUploading(false);
       setUploadProgress(0);
     }
   };
 
-  // Clean up the timeout on unmount
+  // Clean up the interval on unmount
   useEffect(() => {
     return () => {
-      if (tokenRefreshTimeout) {
-        clearTimeout(tokenRefreshTimeout);
+      if (tokenRefreshInterval) {
+        clearInterval(tokenRefreshInterval);
       }
     };
-  }, [tokenRefreshTimeout]);
+  }, [tokenRefreshInterval]);
 
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Vidéo
+        Video
         <Button onClick={toggleEdit} variant="ghost">
-          {isEditing && <>Annuler</>}
+          {isEditing && <>Cancel</>}
           {!isEditing && !initialData.videoUrl && (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
-              Ajouter une vidéo
+              Add a video
             </>
           )}
           {!isEditing && initialData.videoUrl && (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Modifier vidéo
+              Edit video
             </>
           )}
         </Button>
@@ -192,7 +184,7 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
       )}
       {initialData.videoUrl && !isEditing && (
         <div className="text-xs text-muted-foreground mt-2">
-          Les vidéos peuvent prendre quelques minutes à traiter. Rafraîchissez la page si la vidéo n&apos;apparaît pas.
+          Videos may take a few minutes to process. Refresh the page if the video doesn't appear.
         </div>
       )}
     </div>
