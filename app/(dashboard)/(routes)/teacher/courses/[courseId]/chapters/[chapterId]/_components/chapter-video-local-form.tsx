@@ -1,9 +1,7 @@
-"use client"
-
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import * as z from 'zod';
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosProgressEvent } from 'axios';
 import { Pencil, PlusCircle, Video } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
@@ -27,48 +25,13 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [currentToken, setCurrentToken] = useState<string | null>(null);
-  const tokenRefreshIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
-  const refreshToken = async () => {
-    try {
-      const newToken = await getToken({ skipCache: true });
-      setCurrentToken(newToken);
-      return newToken;
-    } catch (error) {
-      console.error('Error refreshing token:', error);
-      return null;
-    }
-  };
-
-  const startTokenRefresh = () => {
-    if (tokenRefreshIntervalRef.current) {
-      clearInterval(tokenRefreshIntervalRef.current);
-    }
-    tokenRefreshIntervalRef.current = setInterval(refreshToken, 4 * 60 * 1000); // Refresh every 4 minutes
-  };
-
-  const stopTokenRefresh = () => {
-    if (tokenRefreshIntervalRef.current) {
-      clearInterval(tokenRefreshIntervalRef.current);
-      tokenRefreshIntervalRef.current = null;
-    }
-  };
-
-  useEffect(() => {
-    return () => {
-      stopTokenRefresh();
-    };
-  }, []);
-
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      await axios.patch(
-        `/api/courses/${courseId}/chapters/${chapterId}`,
-        values
-      );
+      await axios.patch(`/api/courses/${courseId}/chapters/${chapterId}`, values);
       toast.success('Chapter modified');
       toggleEdit();
       router.refresh();
@@ -83,45 +46,70 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
 
     setIsUploading(true);
     setUploadProgress(0);
+    abortControllerRef.current = new AbortController();
 
     try {
-      // Refresh token before starting upload
-      const initialToken = await refreshToken();
-      if (!initialToken) {
-        throw new Error('Failed to refresh token');
-      }
-
-      // Start periodic token refresh
-      startTokenRefresh();
-
       const formData = new FormData();
       formData.append('video', file);
 
-      const response = await axios.post('/api/upload', formData, {
+      const config: AxiosRequestConfig = {
         headers: {
           'Content-Type': 'multipart/form-data',
-          'Authorization': `Bearer ${initialToken}`,
         },
-        onUploadProgress: (progressEvent) => {
+        onUploadProgress: (progressEvent: AxiosProgressEvent) => {
           const percentCompleted = Math.round(
             (progressEvent.loaded * 100) / (progressEvent.total || file.size)
           );
           setUploadProgress(percentCompleted);
         },
-      });
+        signal: abortControllerRef.current.signal,
+      };
+
+      // Function to get a fresh token and update headers
+      const getAndSetToken = async () => {
+        const token = await getToken();
+        if (token) {
+          config.headers = {
+            ...config.headers,
+            Authorization: `Bearer ${token}`
+          };
+        }
+      };
+
+      // Set initial token
+      await getAndSetToken();
+
+      // Set up token refresh
+      const refreshInterval = setInterval(getAndSetToken, 4 * 60 * 1000); // Refresh every 4 minutes
+
+      const response = await axios.post('/api/upload', formData, config);
+
+      clearInterval(refreshInterval);
 
       const videoUrl = response.data.url;
       onSubmit({ videoUrl });
       toast.success('Video uploaded successfully');
     } catch (error) {
-      console.error('Upload error:', error);
-      toast.error('Error uploading video');
+      if (axios.isCancel(error)) {
+        toast.error('Upload cancelled');
+      } else {
+        console.error('Upload error:', error);
+        toast.error('Error uploading video');
+      }
     } finally {
-      stopTokenRefresh();
       setIsUploading(false);
       setUploadProgress(0);
+      abortControllerRef.current = null;
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+      }
+    };
+  }, []);
 
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
@@ -184,7 +172,7 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
       )}
       {initialData.videoUrl && !isEditing && (
         <div className="text-xs text-muted-foreground mt-2">
-          Attendez la vidéo! Cela peut prendre quelque minutes.
+          Attendez la vidéo! Cela peut prendre quelques minutes.
         </div>
       )}
     </div>
