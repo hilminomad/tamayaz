@@ -58,6 +58,7 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
     try {
       // Get the JWT token from Clerk for Authorization
       const token = await getToken();// You may use a specific token template or leave it blank for default.
+      console.log('Token:', token);
 
       const response = await axios.post('/api/upload', formData, {
         headers: {
