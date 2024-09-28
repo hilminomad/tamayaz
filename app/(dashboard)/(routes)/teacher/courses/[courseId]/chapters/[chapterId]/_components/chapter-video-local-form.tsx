@@ -27,15 +27,16 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
   const [isUploading, setIsUploading] = useState(false);
   const [uploadProgress, setUploadProgress] = useState(0);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const [tokenRefreshTimeout, setTokenRefreshTimeout] = useState<NodeJS.Timeout | null>(null);
 
   const toggleEdit = () => setIsEditing((current) => !current);
 
   // Refresh token function
-  async function refreshTokenBeforeExpiry() {
+  const refreshTokenBeforeExpiry = async () => {
     const token = await getToken();
     if (token) {
       const payload = JSON.parse(atob(token.split('.')[1]));
-      const expirationTime = payload.exp * 1000;
+      const expirationTime = payload.exp * 1000; // Token expiration time
       const currentTime = Date.now();
       const timeUntilExpiry = expirationTime - currentTime;
 
@@ -43,16 +44,23 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
       const refreshTime = timeUntilExpiry - 30000;
 
       if (refreshTime > 0) {
-        setTimeout(async () => {
-          // Refresh the token just before it expires
-          await getToken();
+        // Clear any existing timeout
+        if (tokenRefreshTimeout) {
+          clearTimeout(tokenRefreshTimeout);
+        }
+
+        // Set a new timeout for refreshing the token
+        const timeoutId = setTimeout(async () => {
+          await getToken(); // Refresh the token
           console.log('Token refreshed successfully.');
-          // Recursively call to set up the next refresh
+          // Call this function again to set up the next refresh
           refreshTokenBeforeExpiry();
         }, refreshTime);
+        
+        setTokenRefreshTimeout(timeoutId);
       }
     }
-  }
+  };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -79,7 +87,7 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
     formData.append('video', file);
 
     try {
-      // Start token refresh mechanism
+      // Start token refresh mechanism only when uploading starts
       refreshTokenBeforeExpiry();
 
       // Get the JWT token from Clerk for Authorization
@@ -104,10 +112,24 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
     } catch (error) {
       toast.error('Erreur');
     } finally {
+      // Clean up timeout when done
+      if (tokenRefreshTimeout) {
+        clearTimeout(tokenRefreshTimeout);
+        setTokenRefreshTimeout(null);
+      }
       setIsUploading(false);
       setUploadProgress(0);
     }
   };
+
+  // Clean up the timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (tokenRefreshTimeout) {
+        clearTimeout(tokenRefreshTimeout);
+      }
+    };
+  }, [tokenRefreshTimeout]);
 
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
