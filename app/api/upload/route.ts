@@ -1,3 +1,5 @@
+"use client"
+
 import { NextRequest, NextResponse } from 'next/server';
 import { createWriteStream } from 'fs';
 import { pipeline } from 'stream/promises';
