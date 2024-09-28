@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import * as z from 'zod';
 import axios from 'axios';
@@ -8,7 +8,6 @@ import { Pencil, PlusCircle, Video } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import ReactPlayer from 'react-player';
-import { getAuth } from '@clerk/nextjs/server';
 import { useAuth } from '@clerk/nextjs';
 
 interface ChapterVideoFormProps {
@@ -30,6 +29,30 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const toggleEdit = () => setIsEditing((current) => !current);
+
+  // Refresh token function
+  async function refreshTokenBeforeExpiry() {
+    const token = await getToken();
+    if (token) {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const expirationTime = payload.exp * 1000;
+      const currentTime = Date.now();
+      const timeUntilExpiry = expirationTime - currentTime;
+
+      // Set a timeout to refresh the token 30 seconds before it expires
+      const refreshTime = timeUntilExpiry - 30000;
+
+      if (refreshTime > 0) {
+        setTimeout(async () => {
+          // Refresh the token just before it expires
+          await getToken();
+          console.log('Token refreshed successfully.');
+          // Recursively call to set up the next refresh
+          refreshTokenBeforeExpiry();
+        }, refreshTime);
+      }
+    }
+  }
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
@@ -56,8 +79,11 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
     formData.append('video', file);
 
     try {
+      // Start token refresh mechanism
+      refreshTokenBeforeExpiry();
+
       // Get the JWT token from Clerk for Authorization
-      const token = await getToken();// You may use a specific token template or leave it blank for default.
+      const token = await getToken({});
       console.log('Token:', token);
 
       const response = await axios.post('/api/upload', formData, {
