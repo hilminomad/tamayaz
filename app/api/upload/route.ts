@@ -4,15 +4,15 @@ import { pipeline } from 'stream/promises';
 import { Readable } from 'stream';
 import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
-import { auth } from '@clerk/nextjs';
-import { isTeacher } from '@/lib/teacher';
+import { auth, clerkClient } from '@clerk/nextjs';
 
 const MAX_FILE_SIZE = 1024 * 1024 * 1024; // 1GB
+const TOKEN_REFRESH_INTERVAL = 4 * 60 * 1000; // 4 minutes
 
 export async function POST(request: NextRequest) {
   console.log('Received request');
   try {
-    // Check authentication
+    // Check initial authentication
     const { userId } = auth();
     console.log('User ID:', userId);
 
@@ -47,6 +47,8 @@ export async function POST(request: NextRequest) {
     const readable = new Readable();
     readable._read = () => {}; // _read is required but you can noop it
 
+    let lastTokenRefresh = Date.now();
+
     await new Promise<void>((resolve, reject) => {
       const reader = fileStream.getReader();
       const push = async () => {
@@ -55,6 +57,20 @@ export async function POST(request: NextRequest) {
           readable.push(null);
           resolve();
         } else {
+          // Check if it's time to refresh the token
+          if (Date.now() - lastTokenRefresh > TOKEN_REFRESH_INTERVAL) {
+            try {
+              // Refresh the session
+              await clerkClient.sessions.getSession(userId);
+              lastTokenRefresh = Date.now();
+              console.log('Token refreshed');
+            } catch (error) {
+              console.error('Error refreshing token:', error);
+              reject(new Error('Token refresh failed'));
+              return;
+            }
+          }
+
           readable.push(Buffer.from(value));
           push();
         }
