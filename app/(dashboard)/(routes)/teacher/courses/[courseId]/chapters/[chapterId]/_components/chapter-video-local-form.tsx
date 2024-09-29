@@ -114,7 +114,11 @@ const ChapterVideoForm = ({ initialData, courseId, chapterId }: ChapterVideoForm
           </div>
         </div>
       )}
-      {/* ... rest of the JSX ... */}
+      {initialData.videoUrl && !isEditing && (
+        <div className="text-xs text-muted-foreground mt-2">
+          Attendez la vidéo! Cela peut prendre quelques minutes.
+        </div>
+      )}
     </div>
   );
 };
