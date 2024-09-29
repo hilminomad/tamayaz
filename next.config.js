@@ -3,6 +3,16 @@ const nextConfig = {
   images: {
     domains: ['utfs.io'],
   },
+  reactStrictMode: true,
+  output: 'standalone',
+  async rewrites() {
+    return [
+      {
+        source: '/uploads/:path*',
+        destination: '/api/serve-file/:path*',
+      },
+    ];
+  },
 };
 
 module.exports = nextConfig;

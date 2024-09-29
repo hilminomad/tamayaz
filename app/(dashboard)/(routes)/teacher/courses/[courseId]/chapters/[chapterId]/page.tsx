@@ -73,7 +73,7 @@ const ChapterIdPage = async ({
               className="flex items-center text-sm hover:opacity-75 transition mb-6"
             >
               <ArrowLeft className="h-4 w-4 mr-2" />
-              Retour à la configuration du cours
+              Retour à la configuration du module
             </Link>
             <div className="flex items-center justify-between w-full">
               <div className="flex flex-col gap-y-2">
@@ -96,7 +96,7 @@ const ChapterIdPage = async ({
             <div>
               <div className="flex items-center gap-x-2">
                 <IconBadge icon={LayoutDashboard} />
-                <h2 className="text-xl">Personnaliser le chapitre</h2>
+                <h2 className="text-xl">Personnaliser</h2>
               </div>
               <ChapterTitleForm
                 initialData={chapter}

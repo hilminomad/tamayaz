@@ -90,7 +90,7 @@ const ChapterQuizForm: React.FC<QuestionsFormProps> = ({ initialData, chapterId,
         </div>
       )}
       <div className="font-medium flex items-center justify-between">
-        Questions du chapitre
+        Questions
         <Button onClick={toggleCreating} variant="ghost">
           {isCreating ? (
             <>Annuler</>
