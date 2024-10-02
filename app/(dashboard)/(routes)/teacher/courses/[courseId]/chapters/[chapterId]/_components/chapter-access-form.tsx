@@ -60,7 +60,7 @@ const ChapterAccessForm = ({
         `/api/courses/${courseId}/chapters/${chapterId}`,
         values
       );
-      toast.success('Chapitre mis à jour');
+      toast.success('Cours mis à jour');
       toggleEdit();
       router.refresh();
     } catch (error) {
@@ -71,7 +71,7 @@ const ChapterAccessForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-      Accès au chapitre
+      Accès au cours
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Annuler</>
@@ -91,9 +91,9 @@ const ChapterAccessForm = ({
           )}
         >
           {initialData.isFree ? (
-            <p>Ce chapitre est disponible gratuitement.</p>
+            <p>Ce cours est disponible gratuitement.</p>
           ) : (
-            <p>Ce chapitre n&apos;est pas gratuit.</p>
+            <p>Ce cours n&apos;est pas gratuit.</p>
           )}
         </div>
       )}
@@ -116,7 +116,7 @@ const ChapterAccessForm = ({
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormDescription>
-                    Cochez cette case si vous souhaitez rendre ce chapitre accessible gratuitement 
+                    Cochez cette case si vous souhaitez rendre ce cours accessible gratuitement 
                     </FormDescription>
                   </div>
                 </FormItem>

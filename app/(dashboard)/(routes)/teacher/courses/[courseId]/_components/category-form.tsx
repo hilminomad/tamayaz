@@ -85,14 +85,14 @@ const CategoryForm = ({
   return (
     <div className="mt-6  mb-28 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        La categorie du cours
+        Niveau
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Annuler</>
           ) : (
             <>
               <Pencil className="h-4 w-4 mr-2" />
-              Modifier la categorie
+              Modifier le niveau
             </>
           )}
         </Button>
@@ -104,7 +104,7 @@ const CategoryForm = ({
             !courseData.categoryId && 'text-slate-500 italic'
           )}
         >
-          {selectedOption?.label || 'Aucune categorie'}
+          {selectedOption?.label || 'Aucun niveau'}
         </p>
       )}
       {isEditing && (

@@ -31,10 +31,10 @@ const Actions = ({ disabled, courseId, isPublished }: ActionsProps) => {
 
       if (isPublished) {
         await axios.patch(`/api/courses/${courseId}/unpublish`);
-        toast.success('Cours non publié');
+        toast.success('Non publié');
       } else {
         await axios.patch(`/api/courses/${courseId}/publish`);
-        toast.success('Cours publié');
+        toast.success('Publié');
         confetti.onOpen();
       }
 
@@ -52,7 +52,7 @@ const Actions = ({ disabled, courseId, isPublished }: ActionsProps) => {
 
       await axios.delete(`/api/courses/${courseId}`);
 
-      toast.success('Cours supprimé');
+      toast.success('Supprimé');
       router.refresh();
       router.push(`/teacher/courses`);
     } catch (error) {

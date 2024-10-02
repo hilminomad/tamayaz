@@ -8,7 +8,7 @@ import axios from 'axios';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 
-import { Pencil } from 'lucide-react';
+import { Check, CheckSquare, Pencil, Square } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 import {
@@ -74,7 +74,7 @@ const IsCourseForm = ({
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        Cours ou Formation
+        Module ou Formation
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? 'Annuler' : (
             <>
@@ -92,7 +92,7 @@ const IsCourseForm = ({
           )}
         >
           {initialData.isCourse ? (
-            <p>C&apos;est un cours.</p>
+            <p>C&apos;est un module.</p>
           ) : (
             <p>C&apos;est une formation.</p>
           )}
@@ -114,7 +114,9 @@ const IsCourseForm = ({
                   </FormControl>
                   <div className="space-y-1 leading-none">
                     <FormDescription>
-                    Cochez pour changer 
+                    <div className='flex'>
+                      <Check/> pour module <Square/> pour formation  
+                      </div> 
                     </FormDescription>
                   </div>
                 </FormItem>

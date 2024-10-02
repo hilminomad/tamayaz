@@ -58,7 +58,7 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
       await axios.post(`/api/courses/${courseId}/chapters`, values);
-      toast.success('Chapitre créer');
+      toast.success('Cours créer');
       toggleCreating();
       router.refresh();
     } catch (error) {
@@ -73,7 +73,7 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
       await axios.put(`/api/courses/${courseId}/chapters/reorder`, {
         list: updateData,
       });
-      toast.success('Ordre des chapitres modifié');
+      toast.success('Ordre des cours modifié');
       router.refresh();
     } catch (error) {
       toast.error("Une erreur s'est produite");
@@ -94,14 +94,14 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
         </div>
       )}
       <div className="font-medium flex items-center justify-between">
-        Chapitres du cours
+        Cours
         <Button onClick={toggleCreating} variant="ghost">
           {isCreating ? (
             <>Annuler</>
           ) : (
             <>
               <PlusCircle className="h-4 w-4 mr-2" />
-              Ajouter un chapitre
+              Ajouter un cours
             </>
           )}
         </Button>
@@ -151,7 +151,7 @@ const ChaptersForm = ({ initialData, courseId }: ChaptersFormProps) => {
       )}
       {!isCreating && (
         <p className="text-xs text-muted-foreground mt-4">
-          Faites glisser pour réordonner les chapitres
+          Faites glisser pour réordonner les cours
         </p>
       )}
     </div>

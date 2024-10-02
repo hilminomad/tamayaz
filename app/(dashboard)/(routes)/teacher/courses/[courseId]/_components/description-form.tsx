@@ -65,7 +65,7 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
   return (
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
-        La description du cours
+        Description
         <Button onClick={toggleEdit} variant="ghost">
           {isEditing ? (
             <>Annuler</>
@@ -101,7 +101,7 @@ const DescriptionForm = ({ initialData, courseId }: DescriptionFormProps) => {
                   <FormControl>
                     <Textarea
                       disabled={isSubmitting}
-                      placeholder="ex. 'Ce cours aborde...'"
+                      placeholder="ex. 'Ce module aborde...'"
                       {...field}
                     />
                   </FormControl>
