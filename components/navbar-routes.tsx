@@ -31,12 +31,12 @@ const NavbarRoutes = () => {
           <div className='flex gap-x-2 ml-auto'>
           <Link href="/sign-up">
             <Button size="sm" variant="outline">
-              Se connecter
+              S&apos;inscrire              
             </Button>
           </Link>
           <Link href="/sign-in">
             <Button size="sm" variant="default">
-              S&apos;inscrire
+              Se connecter
             </Button>
           </Link>
           </div>        
