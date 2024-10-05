@@ -52,21 +52,11 @@ const FormationEnrollForm = ({ options, students }: FormationEnrollFormProps) =>
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // Check for existing purchase
-      const existingPurchase = await db.purchase.findFirst({
-        where: {
-          userId: values.studentId,
-          courseId: values.courseId,
-        },
-      });
-  
-      if (existingPurchase) {
-        toast.error("Cette formation est déjà inscrite pour cet étudiant");
-        return;
-      }
-  
       // Create purchase if it doesn't exist
       await axios.post('/api/purchase', values);
+      toast.success('Étudiants inscrits');
+      toggleEdit();
+      router.refresh();
       // ... rest of your success logic
     } catch (error) {
       toast.error("Une erreur s'est produite");

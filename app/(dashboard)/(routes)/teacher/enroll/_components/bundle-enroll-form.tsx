@@ -50,24 +50,18 @@ const EnrollForm = ({ options, students }: EnrollFormProps) => {
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     try {
-      // Check for existing purchase
-      const existingPurchase = await db.bundlePurchase.findFirst({
-        where: {
-          userId: values.studentId,
-          categoryId: values.categoryId,
-        },
-      });
-  
-      if (existingPurchase) {
-        toast.error("Cette formation est déjà inscrite pour cet étudiant");
-        return;
-      }
-      await axios.post('/api/bundles', values); // Adjust the API route as necessary
+      console.log('starting...')
+      await axios.post('/api/bundles', values);
+      console.log('request sent')
       toast.success('Étudiants inscrits');
       toggleEdit();
       router.refresh();
     } catch (error) {
-      toast.error("Une erreur s'est produite");
+      if (axios.isAxiosError(error) && error.response) {
+        toast.error(error.response.data || "Une erreur s'est produite");
+      } else {
+        toast.error("Une erreur s'est produite");
+      }
     }
   };
 

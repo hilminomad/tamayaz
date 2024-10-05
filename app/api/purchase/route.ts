@@ -14,6 +14,17 @@ export async function POST(req: Request) {
       return new NextResponse('Unauthorized operation', { status: 401 });
     }
 
+    const existingPurchase = await db.purchase.findFirst({
+      where: {
+        userId: studentId,
+        courseId: courseId,
+      },
+    });
+
+    if (existingPurchase) {
+      return NextResponse.json({ error: "Cette formation est déjà inscrite pour cet étudiant" }, { status: 400 });
+    }
+
     // Create a bundle purchase entry for the student
     const purchase = await db.purchase.create({
       data: {
