@@ -8,7 +8,9 @@ import FormationEnrollForm from './_components/formation-enroll-form';
 
 const EnrollPage = async () => {
 
-  const students = await clerkClient.users.getUserList();
+  const students = await clerkClient.users.getUserList({
+    limit: 500, // Set to the maximum allowed by Clerk
+  });
 
   const categories = await db.category.findMany();
   const courses = await db.course.findMany(
