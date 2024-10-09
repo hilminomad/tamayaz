@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form';
 
 
 
-import { Pencil } from 'lucide-react';
+import { Pencil, PlusCircle } from 'lucide-react';
 import toast from 'react-hot-toast';
 
 import {
@@ -67,13 +67,13 @@ const FormationEnrollForm = ({ options, students }: FormationEnrollFormProps) =>
     <div className="mt-6 border bg-slate-100 rounded-md p-4">
       <div className="font-medium flex items-center justify-between">
         Sélectionner formation et étudiant
-        <Button onClick={toggleEdit} variant="ghost">
+        <Button onClick={toggleEdit}>
           {isEditing ? (
             <>Annuler</>
           ) : (
             <>
-              <Pencil className="h-4 w-4 mr-2" />
-              Modifier la sélection
+              <PlusCircle className="h-4 w-4 mr-2" />
+              Ajouter
             </>
           )}
         </Button>
@@ -111,7 +111,7 @@ const FormationEnrollForm = ({ options, students }: FormationEnrollFormProps) =>
               )}
             />
             <div className="flex items-center gap-x-2">
-              <Button disabled={!isValid || isSubmitting} type="submit">
+              <Button  disabled={!isValid || isSubmitting} type="submit">
                 Enregistrer
               </Button>
             </div>
