@@ -38,7 +38,7 @@ const CategoryCard = ({ category }: CategoryCardProps) => {
           </div>
         ) : (
           <div className="p-2 rounded-xl bg-black">
-            <p className="text-slate-200 text-xs">{formatPrice(category.price || 20)}</p>
+            <p className="text-slate-200 text-xs">{formatPrice(category.price || 500)}</p>
           </div>
         )}
       </div>

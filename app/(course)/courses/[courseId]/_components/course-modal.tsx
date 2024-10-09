@@ -74,7 +74,7 @@ export const CourseModal = async ({
               <Book/>
               <p className='text-xl text-blue font-semibold'>
                {course.chapters.length} 
-              {course.chapters.length === 1 ? ' Chapitre' : ' Chapitres'} 
+              {course.chapters.length === 1 ? ' Cours' : ' Cours'} 
               </p>
                 
               </div>
@@ -96,7 +96,7 @@ export const CourseModal = async ({
         </div>
         
       </div>
-      <div className="p-6 flex flex-wrap justify-around w-full">
+      <div className="p-6 min-h-screen mb-8 flex flex-wrap justify-around w-full">
         {course.chapters.map((chapter) => (
           
           <CourseSidebarItem
@@ -108,7 +108,7 @@ export const CourseModal = async ({
             isCompleted={!!chapter.userProgress?.[0]?.isCompleted}
             isProgress={!!chapter.userProgress?.[0]?.isFirstTime}
             courseId={course.id}
-            isLocked={!chapter.isFree && !purchase}
+            isLocked={!chapter.isFree && !hasAccess}
           />
         ))}
       </div>

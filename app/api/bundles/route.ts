@@ -14,27 +14,62 @@ export async function POST(req: Request) {
       return new NextResponse('Unauthorized operation', { status: 401 });
     }
 
-
-    const existingPurchase = await db.bundlePurchase.findFirst({
+    // Check if the bundle purchase already exists
+    const existingBundlePurchase = await db.bundlePurchase.findFirst({
       where: {
         userId: studentId,
         categoryId: categoryId,
       },
     });
 
-    if (existingPurchase) {
+    if (existingBundlePurchase) {
       return NextResponse.json({ error: "Ce semestre est déjà inscrit pour cet étudiant" }, { status: 400 });
     }
 
-    // Create a bundle purchase entry for the student
-    const bundlePurchase = await db.bundlePurchase.create({
-      data: {
-        userId: studentId, // Use studentId for the userId field
-        categoryId,
-      },
+    // Start a transaction to ensure all operations succeed or fail together
+    const result = await db.$transaction(async (tx) => {
+      // Create a bundle purchase entry for the student
+      const bundlePurchase = await tx.bundlePurchase.create({
+        data: {
+          userId: studentId,
+          categoryId,
+        },
+      });
+
+      // Get all courses for the category
+      const courses = await tx.course.findMany({
+        where: {
+          categoryId: categoryId,
+        },
+      });
+
+      // Create purchase entries for each course
+      const coursePurchases = await Promise.all(
+        courses.map(async (course) => {
+          // Check if the purchase already exists
+          const existingPurchase = await tx.purchase.findFirst({
+            where: {
+              userId: studentId,
+              courseId: course.id,
+            },
+          });
+
+          if (!existingPurchase) {
+            return tx.purchase.create({
+              data: {
+                userId: studentId,
+                courseId: course.id,
+              },
+            });
+          }
+          return existingPurchase;
+        })
+      );
+
+      return { bundlePurchase, coursePurchases };
     });
 
-    return NextResponse.json(bundlePurchase);
+    return NextResponse.json(result);
   } catch (error) {
     console.log('[BUNDLES]', error);
     return new NextResponse('Internal Error', { status: 500 });
