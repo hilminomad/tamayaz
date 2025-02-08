@@ -1,4 +1,4 @@
-import { Course, Purchase } from '@prisma/client';
+import { BundlePurchase, Category, Course, Purchase } from '@prisma/client';
 
 import { db } from '@/lib/db';
 

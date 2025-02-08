@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 
-import { auth } from '@clerk/nextjs';
-import { CheckCircle, Clock } from 'lucide-react';
+import { auth, clerkClient, currentUser } from '@clerk/nextjs';
+import { CheckCircle, Clock, Monitor } from 'lucide-react';
 
 import { CoursesList } from '@/components/courses-list';
 import { InfoCard } from './_components/info-card';
@@ -15,21 +15,25 @@ export default async function Dashboard() {
     redirect('/')
   }
 
+  // To do: get sessions and keep only one
+ 
+
   const { completedCourses, coursesInProgress } = await getDashboardCourses(
     userId
   );
+
 
   return (
     <div className="p-6 space-y-4 mb-8">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <InfoCard
           icon={Clock}
-          label="Continuer les cours          "
+          label="Continuer les cours"
           numberOfItems={coursesInProgress.length}
         />
         <InfoCard
           icon={CheckCircle}
-          label="Cours terminés          "
+          label="Modules terminés"
           numberOfItems={completedCourses.length}
           variant="success"
         />
